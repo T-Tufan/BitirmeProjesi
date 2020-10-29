@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="Mavi">#2E45E2</color>
+    <color name="Kırmızı">#E40303</color>
+    <color name="Beyaz">#FFFFFF</color>
+    <color name="colorPrimary">#FFC107</color>
+    <color name="colorPrimaryDark">#FFA000</color>
+    <color name="backgroundColor">#FCFCFC</color>
+    <color name="lightGrayLine">#ededed</color>
+    <color name="deepPurple">#7c4dff</color>
+    <color name="materialYellow">#ffb300</color>
+    <color name="materialGreen">#00bfa5</color>
+    <color name="colorAccent">#D81B60</color>
+</resources>

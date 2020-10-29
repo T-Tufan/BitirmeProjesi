@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">TezBaşlangıç</string>
+    <string name="ürün_isim">İsim</string>
+    <string name="ürün_fiyat">Fiyat</string>
+    <string name="ürün_market">Market</string>
+    <string name="title_activity_mrkt_konum">Map</string>
+</resources>
