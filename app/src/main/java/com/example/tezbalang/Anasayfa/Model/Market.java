@@ -8,11 +8,12 @@ public class Market {
     private Double market_boylam;
     private Double market_enlem;
 
-    public Market(String market_isim, String market_aciklama,Double market_boylam,Double market_enlem) {
+    public Market(String market_isim, String market_aciklama,Double market_boylam,Double market_enlem,String market_foto) {
         this.market_isim = market_isim;
         this.market_aciklama = market_aciklama;
         this.market_boylam = market_boylam;
         this.market_enlem = market_enlem;
+        this.market_foto = market_foto;
     }
 
     public Market(String market_isim,String market_foto,Integer market_sube_sayi, Double market_boylam,Double market_enlem) {

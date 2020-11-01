@@ -9,8 +9,11 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -34,14 +37,18 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.Projection;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -56,6 +63,7 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
     ArrayList<String> aciklamaList = new ArrayList<>();
     ArrayList<Double> boylamList = new ArrayList<>();
     ArrayList<Double> enlemList = new ArrayList<>();
+    ArrayList<Bitmap> logoList = new ArrayList<>();
     public static String url = "https://raw.githubusercontent.com/T-Tufan/Tez/master/marketler.json";
 
     @Override
@@ -221,6 +229,15 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
                     aciklamaList.add(marketArrayList.get(i).getMarket_aciklama());
                     boylamList.add(marketArrayList.get(i).getMarket_boylam());
                     enlemList.add(marketArrayList.get(i).getMarket_enlem());
+                    try {
+                        URL url = new URL(marketArrayList.get(i).getMarket_foto());
+                        Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                        logoList.add(image);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 else if (marktpage_gelen_market !=null && marktpage_gelen_market.equals(marketArrayList.get(i).getMarket_isim())){
                     Log.d("Okunan Market ",marktpage_gelen_market);
@@ -228,6 +245,15 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
                     aciklamaList.add(marketArrayList.get(i).getMarket_aciklama());
                     boylamList.add(marketArrayList.get(i).getMarket_boylam());
                     enlemList.add(marketArrayList.get(i).getMarket_enlem());
+                    try {
+                        URL url = new URL(marketArrayList.get(i).getMarket_foto());
+                        Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                        logoList.add(image);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
                 else{
                     Log.d("Eşlesme Durumu","Market ismi eşleşmedi");
@@ -240,7 +266,9 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
             if (progressDialog.isShowing()){
                 progressDialog.dismiss();//progress dialog kapatılır.
             }
-            Konumlar(mMap,aciklamaList,enlemList,boylamList);
+
+            //Konumlar bu fonksiyon ile yerleştiriliyor.Önemli !!!!!!!!!!!!!!
+            Konumlar(mMap,aciklamaList,enlemList,boylamList,logoList);
         }
 
 
@@ -269,7 +297,8 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
                         String aciklama=calfourjson.getString("aciklama");
                         Double enlem=Double.valueOf(calfourjson.getString("enlem"));
                         Double boylam =Double.valueOf(calfourjson.getString("boylam"));
-                        Market CalfourMarket = new Market(isim,aciklama,boylam,enlem);
+                        String foto_path = calfourjson.getString("foto_path");
+                        Market CalfourMarket = new Market(isim,aciklama,boylam,enlem,foto_path);
                         marketArrayList.add(CalfourMarket);
                     }
                     for (int i = 0; i<migros.length();i++){
@@ -280,7 +309,8 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
                         String aciklama=migrosjson.getString("aciklama");
                         Double enlem=Double.valueOf(migrosjson.getString("enlem"));
                         Double boylam =Double.valueOf(migrosjson.getString("boylam"));
-                        Market MigrosMarket = new Market(isim,aciklama,boylam,enlem);
+                        String foto_path = migrosjson.getString("foto_path");
+                        Market MigrosMarket = new Market(isim,aciklama,boylam,enlem,foto_path);
                         marketArrayList.add(MigrosMarket);
                     }
 
@@ -296,12 +326,14 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
         }
 
     }
-    public void Konumlar (GoogleMap mMap, ArrayList<String> aciklamaList,ArrayList<Double> enlemList,ArrayList<Double> boylamList){
+    public void Konumlar (GoogleMap mMap, ArrayList<String> aciklamaList, ArrayList<Double> enlemList, ArrayList<Double> boylamList, ArrayList<Bitmap> icon){
         onStart();
         for (int i=0;i<aciklamaList.size();i++){
+
+            Bitmap kucukLogo = Bitmap.createScaledBitmap(logoList.get(i), 100, 100,false);
             Log.d("Harita Konum Sayısı ",String.valueOf(i));
             LatLng konum = new LatLng(enlemList.get(i),boylamList.get(i));
-            mMap.addMarker(new MarkerOptions().position(konum).title(aciklamaList.get(i)));
+            mMap.addMarker(new MarkerOptions().position(konum).title(aciklamaList.get(i)).icon(BitmapDescriptorFactory.fromBitmap(kucukLogo)));
             mMap.moveCamera(CameraUpdateFactory.newLatLng(konum));
         }
     }

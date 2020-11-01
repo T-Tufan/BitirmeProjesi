@@ -3,9 +3,17 @@ package com.example.tezbalang.Anasayfa;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.camera.core.ImageAnalysis;
+import androidx.camera.core.ImageProxy;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -28,9 +36,10 @@ import com.google.mlkit.vision.label.automl.AutoMLImageLabelerLocalModel;
 import com.google.mlkit.vision.label.automl.AutoMLImageLabelerOptions;
 import com.google.mlkit.vision.label.automl.AutoMLImageLabelerRemoteModel;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
-public class FotoTanimaActivity extends AppCompatActivity {
+public class FotoTanimaActivity extends AppCompatActivity{
 
     Button btn;
     @Override
@@ -50,7 +59,7 @@ public class FotoTanimaActivity extends AppCompatActivity {
 
     }
 
-    @Override
+        @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 33) {
 
@@ -66,7 +75,7 @@ public class FotoTanimaActivity extends AppCompatActivity {
                             .build();
 
             final AutoMLImageLabelerRemoteModel remoteModel =
-                    new AutoMLImageLabelerRemoteModel.Builder("MarketProducts").build();
+                    new AutoMLImageLabelerRemoteModel.Builder("MarketProductsOctober1").build();
 
             DownloadConditions downloadConditions = new DownloadConditions.Builder()
                     .requireWifi()
@@ -100,8 +109,8 @@ public class FotoTanimaActivity extends AppCompatActivity {
                                     .build();
 
                             ImageLabeler labeler = ImageLabeling.getClient(options);
-                            InputImage image = InputImage.fromBitmap(bitmap, 0);
-                            labeler.process(image)
+
+                            labeler.process(imageFromBitmap(bitmap))
                                     .addOnSuccessListener(new OnSuccessListener<List<ImageLabel>>() {
                                         @Override
                                         public void onSuccess(List<ImageLabel> labels) {
@@ -116,8 +125,7 @@ public class FotoTanimaActivity extends AppCompatActivity {
                                                 float confidence = label.getConfidence();
                                                 Log.d("Labeller ", text);
                                             }
-                                            TextView textView = findViewById(R.id.textView);
-                                            textView.setText(labels.get(0).getText()+" "+labels.get(0).getConfidence());
+                                            Toast.makeText(getApplicationContext(),labels.get(0).getText()+" adlı ürün bilgileri listeleniyor...",Toast.LENGTH_SHORT).show();
 
                                             Intent ıntent=new Intent(getApplicationContext(), UrunDetayActivity.class);
                                             ıntent.putExtra("Foto_urun",labels.get(0).getText());
@@ -136,5 +144,13 @@ public class FotoTanimaActivity extends AppCompatActivity {
                     });
         }
             super.onActivityResult(requestCode, resultCode, data);
+    }
+    private InputImage imageFromBitmap(Bitmap bitmap) {
+        int rotationDegree = 0;
+        // [START image_from_bitmap]
+        InputImage image = InputImage.fromBitmap(bitmap, rotationDegree);
+
+        return image;
+        // [END image_from_bitmap]
     }
 }

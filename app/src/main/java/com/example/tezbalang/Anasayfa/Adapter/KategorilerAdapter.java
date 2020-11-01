@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -25,12 +26,21 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KategorilerAdapter extends BaseAdapter implements Filterable {
+public class KategorilerAdapter extends BaseAdapter {
     Context context;
     ArrayList<Kategoriler> kategorilers;
     LayoutInflater layoutInflater;
+    ArrayList<String> aramalistesi;
     private List<Kategoriler> kategorilersFull;
 
+    /*public KategorilerAdapter(Activity activity, ArrayList<Kategoriler> kategorilers,ArrayList<String> aramalistesi) {
+        this.context = activity;
+        this.aramalistesi = aramalistesi;
+        this.kategorilers = kategorilers;
+        kategorilersFull = new ArrayList<>(kategorilers);
+        this.layoutInflater = (LayoutInflater) context.getSystemService(Service.LAYOUT_INFLATER_SERVICE);
+
+    }*/
     public KategorilerAdapter(Activity activity, ArrayList<Kategoriler> kategorilers) {
         this.context = activity;
         this.kategorilers = kategorilers;
@@ -43,6 +53,9 @@ public class KategorilerAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public int getCount() {
+        if (kategorilers.isEmpty()){
+            Toast.makeText(context,"Kayıtlı ürün bulunamadı...",Toast.LENGTH_LONG).show();
+        }
         return kategorilers.size();
     }
 
@@ -58,8 +71,10 @@ public class KategorilerAdapter extends BaseAdapter implements Filterable {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-
+           /* ArrayAdapter<String> adapter =  new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, android.R.id.text1,aramalistesi);
+            Log.d("ADAPTER SONUCU :",aramalistesi.get(0)+" "+aramalistesi.get(1).toString());*/
             View view = layoutInflater.inflate(R.layout.urunler_card_tasarim, null);
+
 
             ImageView Foto = (ImageView) view.findViewById(R.id.urun1foto);
             TextView Isim = (TextView) view.findViewById(R.id.urun1isim);
@@ -87,7 +102,7 @@ public class KategorilerAdapter extends BaseAdapter implements Filterable {
 
     }
 
-    @Override
+    /*@Override
     public Filter getFilter() {
         return kategorilerFilter;
     }
@@ -118,5 +133,5 @@ public class KategorilerAdapter extends BaseAdapter implements Filterable {
             kategorilers.addAll((List)results.values);
             notifyDataSetChanged();
         }
-    };
+    };*/
 }

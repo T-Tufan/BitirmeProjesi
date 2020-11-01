@@ -85,12 +85,14 @@ public class UrunDetayActivity extends AppCompatActivity {
             Log.d("Barkod veya Fotoğraf ismi veya ktgr : ",barc+" "+foto_isim+" "+str);
 
 
-            //işlem gerçekleştirilirken yapılan işlemler
+            //internetten json veriler çekildikten sonraki işlemler
             if (jsonString !=null){
                 //json sayfa iceriği boş değilse
                 try {
                     JSONObject jsonObject=new JSONObject(jsonString);
                     Log.d("json object bölümü : ","çalıştı");
+
+                    //Ürünler veya Kategoriler bölümünden gelinmiş ise
                     if (str !=null){
 
                         JSONArray ürünler = jsonObject.getJSONArray(str);
@@ -119,9 +121,8 @@ public class UrunDetayActivity extends AppCompatActivity {
                                 Log.d("Ürün Bilgi","Ürün barkodu eşleşmedi");
                             }
                     }
-
-
                     }
+                    //Fotoğraftan tanıma bölümünden gelinmiş ise burası çalışır.
                     else {
                             JSONArray ürünler = jsonObject.getJSONArray("icecekler");
                         Log.d("json array bölümü : ","çalıştı");

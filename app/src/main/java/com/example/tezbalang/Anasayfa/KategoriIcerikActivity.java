@@ -110,6 +110,7 @@ public class KategoriIcerikActivity extends AppCompatActivity implements SearchV
             }
             else
             {
+
                 Log.d("Json_Response", "Veri yok");
             }
             return null;

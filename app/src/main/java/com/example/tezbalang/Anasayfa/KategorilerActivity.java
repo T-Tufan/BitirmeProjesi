@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import com.example.tezbalang.R;
 public class KategorilerActivity extends AppCompatActivity {
-    public LinearLayout icecekler_buton,etvesut_buton,teknolojik_buton,kisiselbakım_buton;
+    public LinearLayout icecekler_buton,etvesut_buton,teknolojik_buton,kisiselbakım_buton,meyvesebze_buton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,6 +18,8 @@ public class KategorilerActivity extends AppCompatActivity {
         icecekler_buton=findViewById(R.id.iceceklerLayout);
         etvesut_buton = findViewById(R.id.etvesutLayout);
         kisiselbakım_buton = findViewById(R.id.kisiselbakımLayout);
+        teknolojik_buton = findViewById(R.id.teknolojiLayout);
+        meyvesebze_buton = findViewById(R.id.meyvesebzeLayout);
         icecekler_buton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -36,6 +38,25 @@ public class KategorilerActivity extends AppCompatActivity {
                 startActivity(ıntent);
             }
         });
+        teknolojik_buton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"Teknoloji ürünleri listeleniyor...",Toast.LENGTH_SHORT).show();
+                Intent ıntent=new Intent(getApplicationContext(), KategoriIcerikActivity.class);
+                ıntent.putExtra("jsonArray","Teknoloji Ürünleri");
+                startActivity(ıntent);
+            }
+        });
+        meyvesebze_buton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"Manav ürünleri listeleniyor...",Toast.LENGTH_SHORT).show();
+                Intent ıntent=new Intent(getApplicationContext(), KategoriIcerikActivity.class);
+                ıntent.putExtra("jsonArray","Meyve Sebze Ürünleri");
+                startActivity(ıntent);
+            }
+        });
+
         kisiselbakım_buton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
