@@ -50,8 +50,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/urunfiyat" />
 
+
     <TextView
         android:id="@+id/urunmarket"
+        android:autoLink="web"
         android:layout_width="80dp"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"

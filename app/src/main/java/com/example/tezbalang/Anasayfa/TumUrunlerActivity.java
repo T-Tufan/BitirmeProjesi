@@ -129,9 +129,13 @@ public class TumUrunlerActivity extends AppCompatActivity  implements SearchView
                 try {
                     JSONObject jsonObject=new JSONObject(jsonString);
 
-                    JSONArray icecekler = jsonObject.getJSONArray("icecekler");
+                    //Json dosyalarının ilgili kısımları alınır.
+                    JSONArray icecekler = jsonObject.getJSONArray("İcecekler");
                     JSONArray et_ve_süt_ürünleri = jsonObject.getJSONArray("Et ve Süt Ürünleri");
+                    JSONArray teknoloji = jsonObject.getJSONArray("Teknoloji Ürünleri");
                     JSONArray kisiselBakim = jsonObject.getJSONArray("KisiselBakim");
+
+
                     for (int i = 0; i<icecekler.length();i++){
                         //Her bir icecek bloğu object olarak geçiyor.
                         //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
@@ -162,6 +166,18 @@ public class TumUrunlerActivity extends AppCompatActivity  implements SearchView
                         //Her bir icecek bloğu object olarak geçiyor.
                         //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
                         JSONObject ürüns= kisiselBakim.getJSONObject(k);
+                        String barkod=ürüns.getString("barkod");
+                        String isim=ürüns.getString("isim");
+                        String foto_path=ürüns.getString("foto-path");
+                        String kategori =ürüns.getString("kategori");
+                        aramaListesi.add(isim);
+                        Kategoriler ürün = new Kategoriler(barkod,isim,foto_path,kategori);
+                        ürünlerArrayList.add(ürün);
+                    }
+                    for (int k = 0; k<teknoloji.length();k++){
+                        //Her bir icecek bloğu object olarak geçiyor.
+                        //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
+                        JSONObject ürüns= teknoloji.getJSONObject(k);
                         String barkod=ürüns.getString("barkod");
                         String isim=ürüns.getString("isim");
                         String foto_path=ürüns.getString("foto-path");

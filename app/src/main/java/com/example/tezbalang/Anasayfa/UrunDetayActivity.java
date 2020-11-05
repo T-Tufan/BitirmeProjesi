@@ -124,7 +124,7 @@ public class UrunDetayActivity extends AppCompatActivity {
                     }
                     //Fotoğraftan tanıma bölümünden gelinmiş ise burası çalışır.
                     else {
-                            JSONArray ürünler = jsonObject.getJSONArray("icecekler");
+                            JSONArray ürünler = jsonObject.getJSONArray("İcecekler");
                         Log.d("json array bölümü : ","çalıştı");
                         for (int i = 0; i<ürünler.length();i++) {
                             //Her bir icecek bloğu object olarak geçiyor.

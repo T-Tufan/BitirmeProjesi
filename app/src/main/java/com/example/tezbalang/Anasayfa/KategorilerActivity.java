@@ -25,7 +25,7 @@ public class KategorilerActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(getApplicationContext(),"İçecekler listeleniyor...",Toast.LENGTH_SHORT).show();
                 Intent ıntent=new Intent(getApplicationContext(), KategoriIcerikActivity.class);
-                ıntent.putExtra("jsonArray","icecekler");
+                ıntent.putExtra("jsonArray","İcecekler");
                 startActivity(ıntent);
             }
         });

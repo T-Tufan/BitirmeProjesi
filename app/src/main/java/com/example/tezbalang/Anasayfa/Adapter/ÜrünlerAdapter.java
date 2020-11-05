@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,7 +64,8 @@ public class ÜrünlerAdapter extends BaseAdapter {
         Picasso.with(context).load(ürünlers.get(position).getFoto_path()).into(Foto2);
         String fiyat= new Double(ürünlers.get(position).getFiyat()).toString();
         Isim2.setText(ürünlers.get(position).getIsim());
-        Market.setText(ürünlers.get(position).getMarket());
+        Market.setText(Html.fromHtml(ürünlers.get(position).getMarket()).toString());
+        Market.setMovementMethod(LinkMovementMethod.getInstance());
         final String market_isim = ürünlers.get(position).getMarket();
         Konum.setOnClickListener(new View.OnClickListener() {
             @Override
