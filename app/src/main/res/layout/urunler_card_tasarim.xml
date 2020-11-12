@@ -46,6 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
                     android:text="İcecekler"
+                    android:textColor="#0F0A5A"
                     android:textStyle="bold" />
 
             </LinearLayout>

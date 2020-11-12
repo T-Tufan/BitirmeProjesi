@@ -33,7 +33,7 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class KategoriIcerikActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
+public class KategoriIcerikActivity extends AppCompatActivity {
     private KategorilerAdapter urunadapter;
     public HttpHandler httpHandler;
     ProgressDialog progressDialog; //Veri çekilirken dönen yuvarlak
@@ -47,13 +47,13 @@ public class KategoriIcerikActivity extends AppCompatActivity implements SearchV
         setContentView(R.layout.urun_liste);
         list = (ListView) findViewById(R.id.liste);
 
-        new getRecipe().execute();//async task bölümünün classı çağırılır.
+        new getKategoriData().execute();//async task bölümünün classı çağırılır.
 
 
     }
     //web üzerinde işlem yapıyoruz.
-    //icecekleri çekiyoruz.3 parça olarak çekilecek.Gerceklesme zamanı ve sonrasında ne olacak.
-    private class  getRecipe extends AsyncTask<Void,Void,Void>{
+    //Kategorilerilere ait ürünleri çekiyoruz.3 parça olarak çekilecek.Gerceklesme zamanı ,öncesi  ve sonrasında ne olacak.
+    private class  getKategoriData extends AsyncTask<Void,Void,Void>{
         ArrayList<Kategoriler> kategorilerArrayList = new ArrayList<>();
         @Override
         protected void onPreExecute() {
@@ -91,17 +91,17 @@ public class KategoriIcerikActivity extends AppCompatActivity implements SearchV
                 try {
                     JSONObject jsonObject=new JSONObject(jsonString);
 
-                    JSONArray icecekler = jsonObject.getJSONArray(str);
-                    for (int i = 0; i<icecekler.length();i++){
+                    JSONArray kategoriler = jsonObject.getJSONArray(str);
+                    for (int i = 0; i<kategoriler.length();i++){
 
-                        JSONObject icecek= icecekler.getJSONObject(i);
-                        String barkod=icecek.getString("barkod");
-                        String isim=icecek.getString("isim");
-                        String foto_path=icecek.getString("foto-path");
-                        String kategori = icecek.getString("kategori");
+                        JSONObject kategorilerJSONObject= kategoriler.getJSONObject(i);
+                        String barkod=kategorilerJSONObject.getString("barkod");
+                        String isim=kategorilerJSONObject.getString("isim");
+                        String foto_path=kategorilerJSONObject.getString("foto-path");
+                        String kategori = kategorilerJSONObject.getString("kategori");
 
-                        Kategoriler kategoriler = new Kategoriler(barkod,isim,foto_path,kategori);
-                        kategorilerArrayList.add(kategoriler);
+                        Kategoriler kategoriler1 = new Kategoriler(barkod,isim,foto_path,kategori);
+                        kategorilerArrayList.add(kategoriler1);
 
                       }
                     }catch (Exception e){
@@ -115,33 +115,5 @@ public class KategoriIcerikActivity extends AppCompatActivity implements SearchV
             }
             return null;
         }
-    }
-
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        Log.e("Gönderilen Arama Sonucu",query);
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        Log.e("Harf Girdikçe",newText);
-        return true;
-    }
-    public String İsimGetir(String url,String tag1,String element1){
-        StringBuilder isimBuilder=new StringBuilder();
-        try {
-            Document document = Jsoup.connect(url).get();
-
-            Elements isimelement = document.select(tag1);
-            for (Element element : isimelement) {
-                isimBuilder.append(element.getElementsByTag(element1).text());
-            }
-        }
-        catch (IOException e){
-            Toast.makeText(KategoriIcerikActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
-        }
-        return isimBuilder.toString();
     }
 }

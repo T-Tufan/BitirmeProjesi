@@ -40,7 +40,6 @@ public class TumUrunlerActivity extends AppCompatActivity  implements SearchView
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tum_urunler);
-        aramakutusu = (SearchView) findViewById(R.id.make_search);
         list = (ListView) findViewById(R.id.liste);
         //async task bölümünün classı çağırılır.
 

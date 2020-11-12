@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.camera.core.ImageAnalysis;
 import androidx.camera.core.ImageProxy;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -63,11 +65,10 @@ public class FotoTanimaActivity extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 33) {
 
-            ImageView resim = (ImageView) findViewById(R.id.imageView);
+            //Modele input olarak verilecek foto bitmap formatına getiriliyor.
             final Bitmap bitmap = (Bitmap) data.getExtras().get("data");//Çekilen resim id olarak bitmap şeklinde alındı ve imageview'e atandı
 
-            resim.setImageBitmap(bitmap);
-
+            //Yerelde bulunan model bilgilerine erişiliyor.
             final AutoMLImageLabelerLocalModel localModel =
                     new AutoMLImageLabelerLocalModel.Builder()
                             .setAssetFilePath("manifest.json")
@@ -75,8 +76,9 @@ public class FotoTanimaActivity extends AppCompatActivity{
                             .build();
 
             final AutoMLImageLabelerRemoteModel remoteModel =
-                    new AutoMLImageLabelerRemoteModel.Builder("MarketProductsOctober1").build();
+                    new AutoMLImageLabelerRemoteModel.Builder("MarketProductsOctober9").build();
 
+            //Model google firebase üzerinden indiriliyor.
             DownloadConditions downloadConditions = new DownloadConditions.Builder()
                     .requireWifi()
                     .build();
@@ -89,10 +91,11 @@ public class FotoTanimaActivity extends AppCompatActivity{
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplicationContext(), "Model indirme başarısız", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Model indirme başarısızzzzzzzzzzzzzz", Toast.LENGTH_LONG).show();
                 }
             });
 
+            //Firebase üzerinden model inmiş ise o model,indirme işlemi başarısız olmuş ise yerel model kullanılır.
             RemoteModelManager.getInstance().isModelDownloaded(remoteModel)
                     .addOnSuccessListener(new OnSuccessListener<Boolean>() {
                         @Override
@@ -104,12 +107,13 @@ public class FotoTanimaActivity extends AppCompatActivity{
                                 optionsBuilder = new AutoMLImageLabelerOptions.Builder(localModel);
                             }
                             AutoMLImageLabelerOptions options = optionsBuilder
-                                    .setConfidenceThreshold(0.0f)  // Evaluate your model in the Firebase console
+                                    .setConfidenceThreshold(0.35f)  // kritik düzey
                                     // to determine an appropriate threshold.
                                     .build();
 
                             ImageLabeler labeler = ImageLabeling.getClient(options);
 
+                            //Bitmap formatındaki fotoğraf modele input olarak veriliyor.
                             labeler.process(imageFromBitmap(bitmap))
                                     .addOnSuccessListener(new OnSuccessListener<List<ImageLabel>>() {
                                         @Override
@@ -125,8 +129,8 @@ public class FotoTanimaActivity extends AppCompatActivity{
                                                 float confidence = label.getConfidence();
                                                 Log.d("Labeller ", text);
                                             }
-                                            Toast.makeText(getApplicationContext(),labels.get(0).getText()+" adlı ürün bilgileri listeleniyor...",Toast.LENGTH_SHORT).show();
-
+                                            //Toast.makeText(getApplicationContext(),labels.get(0).getText()+" "+labels.get(0).getConfidence()+" adlı ürün bilgileri listeleniyor...",Toast.LENGTH_LONG).show();
+                                            //En yakın ürün ismi,ürün detay sayfasına işleme alınmak üzere gönderiliyor.
                                             Intent ıntent=new Intent(getApplicationContext(), UrunDetayActivity.class);
                                             ıntent.putExtra("Foto_urun",labels.get(0).getText());
                                             startActivity(ıntent);

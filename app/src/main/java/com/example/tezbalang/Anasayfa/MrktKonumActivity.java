@@ -20,6 +20,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -73,7 +74,10 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
 
         //Toast.makeText(getApplicationContext(),"Market : "+aciklamaList.get(0),Toast.LENGTH_SHORT).show();
 
-
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
 
         new getRecipe().execute();
 
@@ -230,13 +234,16 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
                     boylamList.add(marketArrayList.get(i).getMarket_boylam());
                     enlemList.add(marketArrayList.get(i).getMarket_enlem());
                     try {
-                        URL url = new URL(marketArrayList.get(i).getMarket_foto());
-                        Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                        URL adres = new URL(marketArrayList.get(i).getMarket_foto());
+                        Bitmap image = BitmapFactory.decodeStream(adres.openConnection().getInputStream());
                         logoList.add(image);
                     } catch (MalformedURLException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
                         e.printStackTrace();
+                    }
+                    finally {
+
                     }
                 }
                 else if (marktpage_gelen_market !=null && marktpage_gelen_market.equals(marketArrayList.get(i).getMarket_isim())){
@@ -246,8 +253,8 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
                     boylamList.add(marketArrayList.get(i).getMarket_boylam());
                     enlemList.add(marketArrayList.get(i).getMarket_enlem());
                     try {
-                        URL url = new URL(marketArrayList.get(i).getMarket_foto());
-                        Bitmap image = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+                        URL adres = new URL(marketArrayList.get(i).getMarket_foto());
+                        Bitmap image = BitmapFactory.decodeStream(adres.openConnection().getInputStream());
                         logoList.add(image);
                     } catch (MalformedURLException e) {
                         e.printStackTrace();

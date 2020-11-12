@@ -3,6 +3,10 @@ package com.example.tezbalang.Anasayfa;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+
+import android.Manifest;
+import android.net.Uri;
+import android.provider.Settings;
 import android.widget.SearchView;
 
 import android.content.Intent;
@@ -15,13 +19,19 @@ import com.example.tezbalang.R;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
+import pub.devrel.easypermissions.EasyPermissions;
+
 public class AnasayfaActivity extends AppCompatActivity {
     public CardView urunler_buton,kategori_buton,barkod_buton,foto_buton,markt_buton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_anasayfa);
 
+        //Gerekli galeri ve kamera izinlei alınıyor...
+        EasyPermissions.requestPermissions(this, "Uygulama içi kamera kullanımı için izin verir misiniz ? ",0,Manifest.permission.CAMERA);
+        //Diğer sayfalara butonlar ile yönlendirme yapılıyor.
         foto_buton = findViewById(R.id.kamera);
         markt_buton = findViewById(R.id.marketler);
         kategori_buton = findViewById(R.id.kategoriler);
@@ -82,6 +92,7 @@ public class AnasayfaActivity extends AppCompatActivity {
         });
     }
 
+    //Barkod Okumadan dönen sonuç kontrol ediliyor.Veri var ise diğer aktivite sayfasına geçiliyor.
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
@@ -98,4 +109,5 @@ public class AnasayfaActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 }

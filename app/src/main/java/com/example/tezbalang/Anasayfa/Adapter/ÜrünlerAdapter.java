@@ -78,7 +78,7 @@ public class ÜrünlerAdapter extends BaseAdapter {
         });
         //Stok.setText("Stok : "+ürünlers.get(position).getStok());
         Acıklama.setText(ürünlers.get(position).getAcıklama());
-        Fiyat.setText("Fiyat : "+fiyat+" TL");
+        Fiyat.setText(fiyat+" TL");
         Foto2.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View v) {

@@ -101,37 +101,4 @@ public class KategorilerAdapter extends BaseAdapter {
 
 
     }
-
-    /*@Override
-    public Filter getFilter() {
-        return kategorilerFilter;
-    }
-    private Filter kategorilerFilter = new Filter() {
-        @Override
-        protected FilterResults performFiltering(CharSequence constraint) {
-            List<Kategoriler>  filteredList = new ArrayList<>();
-            if (constraint == null || constraint.length() ==0){
-                filteredList.addAll(kategorilersFull);
-            }else {
-                String filterPattern = constraint.toString().toLowerCase().trim();
-                for (Kategoriler item : kategorilersFull){
-                    if (item.getIsim().toLowerCase().contains(filterPattern)){
-                        filteredList.add(item);
-                        Log.d("ADFJFNDAINFDADDAD",item.getIsim());
-                    }
-                }
-            }
-            FilterResults results = new FilterResults();
-            results.values = filteredList;
-
-            return  results;
-        }
-
-        @Override
-        protected void publishResults(CharSequence constraint, FilterResults results) {
-            kategorilers.clear();
-            kategorilers.addAll((List)results.values);
-            notifyDataSetChanged();
-        }
-    };*/
 }
