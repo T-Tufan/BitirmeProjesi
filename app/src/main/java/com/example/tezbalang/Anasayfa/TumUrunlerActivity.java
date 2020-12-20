@@ -6,33 +6,27 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.os.StrictMode;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
 
 
 import com.example.tezbalang.Anasayfa.Adapter.KategorilerAdapter;
 import com.example.tezbalang.Anasayfa.Model.HttpHandler;
-import com.example.tezbalang.Anasayfa.Model.Kategoriler;
+import com.example.tezbalang.Anasayfa.Model.ÜrünGenelBilgi;
 import com.example.tezbalang.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class TumUrunlerActivity extends AppCompatActivity  implements SearchView.OnQueryTextListener{
+public class TumUrunlerActivity extends AppCompatActivity{
     private KategorilerAdapter urunadapter;
     public HttpHandler httpHandler;
     ProgressDialog progressDialog; //Veri çekilirken dönen yuvarlak
     ListView list;
-    ArrayList<String> aramaListesi = new ArrayList<>();
     SearchView aramakutusu;
 
     public static String url = "https://raw.githubusercontent.com/T-Tufan/Tez/master/kategoriler.json";
@@ -43,24 +37,9 @@ public class TumUrunlerActivity extends AppCompatActivity  implements SearchView
         list = (ListView) findViewById(R.id.liste);
         //async task bölümünün classı çağırılır.
 
-        new getRecipe().execute();
+        new getAllProducts().execute();
     }
 
-    private void setupArama(){
-        aramakutusu.setIconifiedByDefault(false);
-        aramakutusu.setOnQueryTextListener((SearchView.OnQueryTextListener) this);
-        aramakutusu.setSubmitButtonEnabled(true);
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        return false;
-    }
 
 
    /*@SuppressLint("ResourceType")
@@ -86,10 +65,9 @@ public class TumUrunlerActivity extends AppCompatActivity  implements SearchView
         return true;
     }*/
 
-    private class  getRecipe extends AsyncTask<Void,Void,Void>  {
-        ArrayList<Kategoriler> ürünlerArrayList = new ArrayList<>();
-
-
+    private class  getAllProducts extends AsyncTask<Void,Void,Void>  {
+        ArrayList<ÜrünGenelBilgi> ürünlerArrayList = new ArrayList<>();
+        ArrayList<JSONArray> jsonArrayArrayList = new ArrayList<>();
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -117,25 +95,41 @@ public class TumUrunlerActivity extends AppCompatActivity  implements SearchView
         @Override
         protected Void doInBackground(Void... voids) {
             httpHandler = new HttpHandler();//içerisine url olarak verdiğim websitenin kaynağını döner.
-            String jsonString = httpHandler.makeServiceCall(url);
+            String jsonString = httpHandler.sunucuBaglantisi(url);
             Log.d("JSON_RESPONSE ",jsonString);
 
-           /* Intent intent = getIntent();
-            String str = intent.getStringExtra("jsonArray");*/
             //işlem gerçekleştirilirken yapılan işlemler
             if (jsonString !=null){
                 //sayfa iceriği boş değilse
                 try {
                     JSONObject jsonObject=new JSONObject(jsonString);
-
                     //Json dosyalarının ilgili kısımları alınır.
                     JSONArray icecekler = jsonObject.getJSONArray("İcecekler");
                     JSONArray et_ve_süt_ürünleri = jsonObject.getJSONArray("Et ve Süt Ürünleri");
                     JSONArray teknoloji = jsonObject.getJSONArray("Teknoloji Ürünleri");
                     JSONArray kisiselBakim = jsonObject.getJSONArray("KisiselBakim");
 
+                    jsonArrayArrayList.add(icecekler);
+                    jsonArrayArrayList.add(et_ve_süt_ürünleri);
+                    jsonArrayArrayList.add(teknoloji);
+                    jsonArrayArrayList.add(kisiselBakim);
+                    for (int k = 0; k<jsonArrayArrayList.size(); k++){
+                        Log.d("Json array dizi boyutu ", String.valueOf(jsonArrayArrayList.size()));
+                        for (int i = 0; i<jsonArrayArrayList.get(k).length();i++){
+                            Log.d("Json array dizi elemanları ", String.valueOf(jsonArrayArrayList.get(k)));
+                            //Her bir icecek bloğu object olarak geçiyor.
+                            //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
+                            JSONObject ürüns= jsonArrayArrayList.get(k).getJSONObject(i);
+                            String barkod=ürüns.getString("barkod");
+                            String isim=ürüns.getString("isim");
+                            String foto_path=ürüns.getString("foto-path");
+                            String kategori =ürüns.getString("kategori");
 
-                    for (int i = 0; i<icecekler.length();i++){
+                            ÜrünGenelBilgi ürün = new ÜrünGenelBilgi(barkod,isim,foto_path,kategori);
+                            ürünlerArrayList.add(ürün);
+                        }
+                    }
+                    /*for (int i = 0; i<icecekler.length();i++){
                         //Her bir icecek bloğu object olarak geçiyor.
                         //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
                         JSONObject ürüns= icecekler.getJSONObject(i);
@@ -143,9 +137,8 @@ public class TumUrunlerActivity extends AppCompatActivity  implements SearchView
                         String isim=ürüns.getString("isim");
                         String foto_path=ürüns.getString("foto-path");
                         String kategori =ürüns.getString("kategori");
-                        Kategoriler ürün = new Kategoriler(barkod,isim,foto_path,kategori);
-                        aramaListesi.add(isim);
-                        Log.d("ürün listesi ",aramaListesi.get(i));
+
+                        ÜrünGenelBilgi ürün = new ÜrünGenelBilgi(barkod,isim,foto_path,kategori);
                         ürünlerArrayList.add(ürün);
                     }
                     for (int j = 0; j<et_ve_süt_ürünleri.length();j++){
@@ -156,9 +149,8 @@ public class TumUrunlerActivity extends AppCompatActivity  implements SearchView
                         String isim=ürüns.getString("isim");
                         String foto_path=ürüns.getString("foto-path");
                         String kategori =ürüns.getString("kategori");
-                        Kategoriler ürün = new Kategoriler(barkod,isim,foto_path,kategori);
-                        aramaListesi.add(isim);
 
+                        ÜrünGenelBilgi ürün = new ÜrünGenelBilgi(barkod,isim,foto_path,kategori);
                         ürünlerArrayList.add(ürün);
                     }
                     for (int k = 0; k<kisiselBakim.length();k++){
@@ -169,8 +161,8 @@ public class TumUrunlerActivity extends AppCompatActivity  implements SearchView
                         String isim=ürüns.getString("isim");
                         String foto_path=ürüns.getString("foto-path");
                         String kategori =ürüns.getString("kategori");
-                        aramaListesi.add(isim);
-                        Kategoriler ürün = new Kategoriler(barkod,isim,foto_path,kategori);
+
+                        ÜrünGenelBilgi ürün = new ÜrünGenelBilgi(barkod,isim,foto_path,kategori);
                         ürünlerArrayList.add(ürün);
                     }
                     for (int k = 0; k<teknoloji.length();k++){
@@ -181,11 +173,10 @@ public class TumUrunlerActivity extends AppCompatActivity  implements SearchView
                         String isim=ürüns.getString("isim");
                         String foto_path=ürüns.getString("foto-path");
                         String kategori =ürüns.getString("kategori");
-                        aramaListesi.add(isim);
-                        Kategoriler ürün = new Kategoriler(barkod,isim,foto_path,kategori);
-                        ürünlerArrayList.add(ürün);
-                    }
 
+                        ÜrünGenelBilgi ürün = new ÜrünGenelBilgi(barkod,isim,foto_path,kategori);
+                        ürünlerArrayList.add(ürün);
+                    }*/
                 }catch (Exception e){
                     e.printStackTrace();
                 }

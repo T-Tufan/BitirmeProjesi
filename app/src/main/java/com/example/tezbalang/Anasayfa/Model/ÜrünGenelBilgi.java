@@ -1,20 +1,20 @@
 package com.example.tezbalang.Anasayfa.Model;
 
-public class Kategoriler {
+public class ÜrünGenelBilgi {
     private String barkod;
     private  String isim;
     private  String foto_path;
     private  String kategori;
 
-    public Kategoriler() {
+    public ÜrünGenelBilgi() {
     }
 
-    public Kategoriler(String barkod, String isim, String foto_path) {
+    /*public Kategoriler(String barkod, String isim, String foto_path) {
         this.barkod = barkod;
         this.isim = isim;
         this.foto_path = foto_path;
-    }
-    public Kategoriler(String barkod, String isim, String foto_path,String kategori) {
+    }*/
+    public ÜrünGenelBilgi(String barkod, String isim, String foto_path, String kategori) {
         this.barkod = barkod;
         this.isim = isim;
         this.foto_path = foto_path;
@@ -23,6 +23,13 @@ public class Kategoriler {
 
     public String getKategori() {
         return kategori;
+    }
+    public String getBarkod() {
+        return barkod;
+    }
+
+    public String getIsim() {
+        return isim;
     }
 
     public void setKategori(String kategori) {
@@ -39,14 +46,6 @@ public class Kategoriler {
 
     public void setFoto_path(String foto_path) {
         this.foto_path = foto_path;
-    }
-
-    public String getBarkod() {
-        return barkod;
-    }
-
-    public String getIsim() {
-        return isim;
     }
 
     public String getFoto_path() {

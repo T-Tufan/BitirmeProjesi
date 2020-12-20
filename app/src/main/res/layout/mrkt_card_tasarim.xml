@@ -13,7 +13,7 @@
         android:layout_marginTop="31dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/_pilic_kanat" />
+        app:srcCompat="@drawable/ic_laptop_mac_black_24dp" />
 
     <TextView
         android:id="@+id/mrkt_isim"

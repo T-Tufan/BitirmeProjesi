@@ -1,7 +1,6 @@
 package com.example.tezbalang.Anasayfa;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SearchView;
 
 
 import android.annotation.SuppressLint;
@@ -10,27 +9,18 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 
-import android.view.inputmethod.EditorInfo;
 import android.widget.ListView;
-import android.widget.Toast;
 
 
 import com.example.tezbalang.Anasayfa.Adapter.KategorilerAdapter;
 import com.example.tezbalang.Anasayfa.Model.HttpHandler;
-import com.example.tezbalang.Anasayfa.Model.Kategoriler;
+import com.example.tezbalang.Anasayfa.Model.ÜrünGenelBilgi;
 import com.example.tezbalang.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class KategoriIcerikActivity extends AppCompatActivity {
@@ -47,14 +37,14 @@ public class KategoriIcerikActivity extends AppCompatActivity {
         setContentView(R.layout.urun_liste);
         list = (ListView) findViewById(R.id.liste);
 
-        new getKategoriData().execute();//async task bölümünün classı çağırılır.
+        new getCategoryData().execute();//async task bölümünün classı çağırılır.
 
 
     }
     //web üzerinde işlem yapıyoruz.
     //Kategorilerilere ait ürünleri çekiyoruz.3 parça olarak çekilecek.Gerceklesme zamanı ,öncesi  ve sonrasında ne olacak.
-    private class  getKategoriData extends AsyncTask<Void,Void,Void>{
-        ArrayList<Kategoriler> kategorilerArrayList = new ArrayList<>();
+    private class  getCategoryData extends AsyncTask<Void,Void,Void>{
+        ArrayList<ÜrünGenelBilgi> ürünGenelBilgiArrayList = new ArrayList<>();
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -70,7 +60,7 @@ public class KategoriIcerikActivity extends AppCompatActivity {
             //işlem tamamlandığında
             super.onPostExecute(aVoid);
 
-            urunadapter = new KategorilerAdapter(KategoriIcerikActivity.this,kategorilerArrayList);
+            urunadapter = new KategorilerAdapter(KategoriIcerikActivity.this, ürünGenelBilgiArrayList);
             list.setAdapter(urunadapter);
             if (progressDialog.isShowing()){
                 progressDialog.dismiss();//progress dialog kapatılır.
@@ -81,7 +71,7 @@ public class KategoriIcerikActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             httpHandler = new HttpHandler();//içerisine url olarak verdiğim websitenin kaynağını döner.
-            String jsonString = httpHandler.makeServiceCall(url);
+            String jsonString = httpHandler.sunucuBaglantisi(url);
             Log.d("JSON_RESPONSE ",jsonString);
             Intent intent = getIntent();
             String str = intent.getStringExtra("jsonArray");
@@ -100,8 +90,8 @@ public class KategoriIcerikActivity extends AppCompatActivity {
                         String foto_path=kategorilerJSONObject.getString("foto-path");
                         String kategori = kategorilerJSONObject.getString("kategori");
 
-                        Kategoriler kategoriler1 = new Kategoriler(barkod,isim,foto_path,kategori);
-                        kategorilerArrayList.add(kategoriler1);
+                        ÜrünGenelBilgi ürünGenelBilgi1 = new ÜrünGenelBilgi(barkod,isim,foto_path,kategori);
+                        ürünGenelBilgiArrayList.add(ürünGenelBilgi1);
 
                       }
                     }catch (Exception e){

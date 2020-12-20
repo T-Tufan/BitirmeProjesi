@@ -34,10 +34,11 @@ public class BarkodOkumaActivity extends AppCompatActivity {
 
         list = (ListView) findViewById(R.id.liste);
 
-        new getRecipe().execute();//async task bölümünün classı çağırılır.
+        new getProductWithBarcode().execute();//async task bölümünün classı çağırılır.
     }
-    private class  getRecipe extends AsyncTask<Void,Void,Void> {
+    private class  getProductWithBarcode extends AsyncTask<Void,Void,Void> {
         ArrayList<Ürünler> ürünlerArrayList = new ArrayList<>();
+        ArrayList<JSONArray> jsonArrayArrayListBarcode = new ArrayList<>();
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -63,7 +64,7 @@ public class BarkodOkumaActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             httpHandler = new HttpHandler();//içerisine url olarak verdiğim websitenin kaynağını döner.
-            String jsonString = httpHandler.makeServiceCall(url);
+            String jsonString = httpHandler.sunucuBaglantisi(url);
             Log.d("JSON_RESPONSE ",jsonString);
             Intent intent = getIntent();
             String barc = intent.getStringExtra("BarkodNo");
@@ -75,8 +76,44 @@ public class BarkodOkumaActivity extends AppCompatActivity {
                 //sayfa iceriği boş değilse
                 try {
                     JSONObject jsonObject=new JSONObject(jsonString);
-                    JSONArray ürünler = jsonObject.getJSONArray("icecekler");
-                    for (int i = 0; i<ürünler.length();i++){
+
+                    JSONArray icecekler = jsonObject.getJSONArray("İcecekler");
+                    JSONArray et_ve_süt_ürünleri = jsonObject.getJSONArray("Et ve Süt Ürünleri");
+                    JSONArray teknoloji = jsonObject.getJSONArray("Teknoloji Ürünleri");
+                    JSONArray kisiselBakim = jsonObject.getJSONArray("KisiselBakim");
+
+                    jsonArrayArrayListBarcode.add(icecekler);
+                    jsonArrayArrayListBarcode.add(et_ve_süt_ürünleri);
+                    jsonArrayArrayListBarcode.add(teknoloji);
+                    jsonArrayArrayListBarcode.add(kisiselBakim);
+                    for (int k = 0; k<jsonArrayArrayListBarcode.size(); k++){
+                        for (int i = 0; i<jsonArrayArrayListBarcode.get(k).length();i++){
+                            //Her bir icecek bloğu object olarak geçiyor.
+                            //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
+                            JSONObject ürüns= jsonArrayArrayListBarcode.get(k).getJSONObject(i);
+                            String barkod=ürüns.getString("barkod");
+                            String isim=ürüns.getString("isim");
+                            String foto_path=ürüns.getString("foto-path");
+                            String market = ürüns.getString("market");
+                            String stok= ürüns.getString("stok");
+                            double fiyat = ürüns.getDouble("fiyat");
+                            String kategori=ürüns.getString("kategori");
+                            String acıklama = ürüns.getString("aciklama");
+
+                            Ürünler ürün = new Ürünler(barkod,fiyat,isim,foto_path,market,stok,kategori,acıklama);
+
+                            Log.d("Ürün barkod",ürün.getBarkod());
+                            Log.d("Barkod Bilgi",barc);
+                            if (ürün.getBarkod().equals(barc)){
+                                ürünlerArrayList.add(ürün);
+                                Log.d("Barkod Eşleşti",barc+" : "+ürün.getBarkod());
+                            }
+                            else{
+                                Log.d("Ürün Bilgi","Ürün barkodu eşleşmedi");
+                            }
+                        }
+                    }
+                    /*for (int i = 0; i<ürünler.length();i++){
                         //Her bir icecek bloğu object olarak geçiyor.
                         //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
                         JSONObject ürüns= ürünler.getJSONObject(i);
@@ -100,7 +137,7 @@ public class BarkodOkumaActivity extends AppCompatActivity {
                         else{
                             Log.d("Ürün Bilgi","Ürün barkodu eşleşmedi");
                         }
-                    }
+                    }*/
 
                 }catch (Exception e){
                     e.printStackTrace();

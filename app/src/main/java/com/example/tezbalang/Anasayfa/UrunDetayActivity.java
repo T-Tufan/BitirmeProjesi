@@ -10,10 +10,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 
-import com.example.tezbalang.Anasayfa.Adapter.KategorilerAdapter;
 import com.example.tezbalang.Anasayfa.Adapter.ÜrünlerAdapter;
 import com.example.tezbalang.Anasayfa.Model.HttpHandler;
-import com.example.tezbalang.Anasayfa.Model.Kategoriler;
 import com.example.tezbalang.Anasayfa.Model.Ürünler;
 import com.example.tezbalang.R;
 
@@ -36,10 +34,11 @@ public class UrunDetayActivity extends AppCompatActivity {
 
         list = (ListView) findViewById(R.id.liste);
 
-        new getRecipe().execute();//async task bölümünün classı çağırılır.
+        new getProductDetails().execute();//async task bölümünün classı çağırılır.
     }
-    private class  getRecipe extends AsyncTask<Void,Void,Void> {
+    private class  getProductDetails extends AsyncTask<Void,Void,Void> {
         ArrayList<Ürünler> ürünlerArrayList = new ArrayList<>();
+        ArrayList<JSONArray> jsonArrayArrayList2 = new ArrayList<>();
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -65,7 +64,7 @@ public class UrunDetayActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             httpHandler = new HttpHandler();//içerisine url olarak verdiğim websitenin kaynağını döner.
-            String jsonString = httpHandler.makeServiceCall(url);
+            String jsonString = httpHandler.sunucuBaglantisi(url);
 
 
             Log.d("JSON_RESPONSE ",jsonString);
@@ -124,8 +123,42 @@ public class UrunDetayActivity extends AppCompatActivity {
                     }
                     //Fotoğraftan tanıma bölümünden gelinmiş ise burası çalışır.
                     else {
-                            JSONArray ürünler = jsonObject.getJSONArray("Et ve Süt Ürünleri");
-                        Log.d("json array bölümü : ","çalıştı");
+                            JSONArray icecekler = jsonObject.getJSONArray("İcecekler");
+                            JSONArray et_ve_süt_ürünleri = jsonObject.getJSONArray("Et ve Süt Ürünleri");
+                            JSONArray teknoloji = jsonObject.getJSONArray("Teknoloji Ürünleri");
+                            JSONArray kisiselBakim = jsonObject.getJSONArray("KisiselBakim");
+
+                            jsonArrayArrayList2.add(icecekler);
+                            jsonArrayArrayList2.add(et_ve_süt_ürünleri);
+                            jsonArrayArrayList2.add(teknoloji);
+                            jsonArrayArrayList2.add(kisiselBakim);
+
+                        for (int k = 0; k<jsonArrayArrayList2.size(); k++) {
+                            Log.d("json array bölümü : ","çalıştı");
+                            for (int i = 0; i<jsonArrayArrayList2.get(k).length();i++) {
+                                //Her bir icecek bloğu object olarak geçiyor.
+                                //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
+                                JSONObject ürüns = jsonArrayArrayList2.get(k).getJSONObject(i);
+                                String barkod = ürüns.getString("barkod");
+                                String isim = ürüns.getString("isim");
+                                String foto_path = ürüns.getString("foto-path");
+                                String market = ürüns.getString("market");
+                                String stok = ürüns.getString("stok");
+                                double fiyat = ürüns.getDouble("fiyat");
+                                String kategori = ürüns.getString("kategori");
+                                String acıklama = ürüns.getString("aciklama");
+
+                                Ürünler ürün = new Ürünler(barkod, fiyat, isim, foto_path, market, stok, kategori, acıklama);
+                                if (ürün.getIsim().equals(foto_isim)){
+                                    ürünlerArrayList.add(ürün);
+                                    Log.d("Foto ismi Eşleşti",foto_isim+" : "+ürün.getIsim());
+                                }
+                                else{
+                                    Log.d("Ürün Bilgi","Fotoğrafa ait ürün bulunamadı.");
+                                }
+                            }
+                        }
+                        /*Log.d("json array bölümü : ","çalıştı");
                         for (int i = 0; i<ürünler.length();i++) {
                             //Her bir icecek bloğu object olarak geçiyor.
                             //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
@@ -147,9 +180,7 @@ public class UrunDetayActivity extends AppCompatActivity {
                         else{
                             Log.d("Ürün Bilgi","Fotoğrafa ait ürün bulunamadı.");
                         }
-                        }
-
-
+                        }*/
                     }
 
                 }catch (Exception e){

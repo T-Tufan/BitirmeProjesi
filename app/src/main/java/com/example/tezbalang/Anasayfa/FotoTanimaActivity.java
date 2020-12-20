@@ -72,7 +72,6 @@ public class FotoTanimaActivity extends AppCompatActivity{
             final AutoMLImageLabelerLocalModel localModel =
                     new AutoMLImageLabelerLocalModel.Builder()
                             .setAssetFilePath("manifest.json")
-                            // or .setAbsoluteFilePath(absolute file path to manifest file)
                             .build();
 
             final AutoMLImageLabelerRemoteModel remoteModel =
@@ -91,7 +90,7 @@ public class FotoTanimaActivity extends AppCompatActivity{
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplicationContext(), "Model indirme başarısızzzzzzzzzzzzzz", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Model indirme başarısız", Toast.LENGTH_LONG).show();
                 }
             });
 
@@ -151,10 +150,7 @@ public class FotoTanimaActivity extends AppCompatActivity{
     }
     private InputImage imageFromBitmap(Bitmap bitmap) {
         int rotationDegree = 0;
-        // [START image_from_bitmap]
         InputImage image = InputImage.fromBitmap(bitmap, rotationDegree);
-
         return image;
-        // [END image_from_bitmap]
     }
 }

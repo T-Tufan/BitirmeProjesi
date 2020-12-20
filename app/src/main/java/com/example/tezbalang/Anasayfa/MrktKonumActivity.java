@@ -13,7 +13,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -28,9 +27,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import android.widget.ZoomControls;
 
-import com.example.tezbalang.Anasayfa.Adapter.KategorilerAdapter;
 import com.example.tezbalang.Anasayfa.Model.HttpHandler;
-import com.example.tezbalang.Anasayfa.Model.Kategoriler;
 import com.example.tezbalang.Anasayfa.Model.Market;
 import com.example.tezbalang.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -42,7 +39,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -51,9 +47,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -79,7 +73,7 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
             StrictMode.setThreadPolicy(policy);
         }
 
-        new getRecipe().execute();
+        new getSingleMarketInfo().execute();
 
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
@@ -203,9 +197,9 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
 
         }
     }
-    private class  getRecipe extends AsyncTask<Void,Void,Void> {
+    private class  getSingleMarketInfo extends AsyncTask<Void,Void,Void> {
         ArrayList<Market> marketArrayList = new ArrayList<>();
-
+        ArrayList<JSONArray> jsonArrayArrayListMarket = new ArrayList<>();
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -218,7 +212,6 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
 
         @Override
         protected void onPostExecute(Void aVoid) {
-            //işlem tamamlandığında
             super.onPostExecute(aVoid);
             Intent intent = getIntent();
             String urunlerpage_gelen_market = intent.getStringExtra("UrunlerPage_Market");
@@ -283,7 +276,7 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
         @Override
         protected Void doInBackground(Void... voids) {
             httpHandler = new HttpHandler();//içerisine url olarak verdiğim websitenin kaynağını döner.
-            String jsonString = httpHandler.makeServiceCall(url);
+            String jsonString = httpHandler.sunucuBaglantisi(url);
             Log.d("JSON_RESPONSE ",jsonString);
 
            /* Intent intent = getIntent();
@@ -296,7 +289,28 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
 
                     JSONArray calfour_Sa = jsonObject.getJSONArray("Calfour-Sa");
                     JSONArray migros = jsonObject.getJSONArray("Migros");
-                    for (int i = 0; i<calfour_Sa.length();i++){
+
+                    jsonArrayArrayListMarket.add(calfour_Sa);
+                    jsonArrayArrayListMarket.add(migros);
+
+                    for (int k = 0; k<jsonArrayArrayListMarket.size(); k++){
+                        Log.d("Json array dizi boyutu ", String.valueOf(jsonArrayArrayListMarket.size()));
+                        for (int i = 0; i<jsonArrayArrayListMarket.get(k).length();i++){
+                            Log.d("Json array dizi elemanları ", String.valueOf(jsonArrayArrayListMarket.get(k)));
+                            //Her bir adres verisine object olarak geçiyor.
+                            //Her bir market verisine döngü içersinde tek tek ulaşılıyor.
+                            JSONObject marketjson= jsonArrayArrayListMarket.get(k).getJSONObject(i);
+                            String isim=marketjson.getString("isim");
+                            String aciklama=marketjson.getString("aciklama");
+                            Double enlem=Double.valueOf(marketjson.getString("enlem"));
+                            Double boylam =Double.valueOf(marketjson.getString("boylam"));
+                            String foto_path = marketjson.getString("foto_path");
+
+                            Market marktInfo = new Market(isim,aciklama,boylam,enlem,foto_path);
+                            marketArrayList.add(marktInfo);
+                        }
+                    }
+                    /*for (int i = 0; i<calfour_Sa.length();i++){
                         //Her bir adres verisine object olarak geçiyor.
                         //Her bir market verisine döngü içersinde tek tek ulaşılıyor.
                         JSONObject calfourjson= calfour_Sa.getJSONObject(i);
@@ -319,7 +333,7 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
                         String foto_path = migrosjson.getString("foto_path");
                         Market MigrosMarket = new Market(isim,aciklama,boylam,enlem,foto_path);
                         marketArrayList.add(MigrosMarket);
-                    }
+                    }*/
 
                 }catch (Exception e){
                     e.printStackTrace();

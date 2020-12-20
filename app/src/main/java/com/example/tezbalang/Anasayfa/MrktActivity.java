@@ -36,9 +36,9 @@ public class MrktActivity extends AppCompatActivity {
         setContentView(R.layout.activity_mrkt);
         list = findViewById(R.id.market_liste);
 
-        new getRecipe().execute();
+        new getMarketNames().execute();
     }
-    private class  getRecipe extends AsyncTask<Void,Void,Void> {
+    private class  getMarketNames extends AsyncTask<Void,Void,Void> {
         ArrayList<Market> marketArrayList = new ArrayList<>();
         @Override
         protected void onPreExecute() {
@@ -65,7 +65,7 @@ public class MrktActivity extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... voids) {
             httpHandler = new HttpHandler();//içerisine url olarak verdiğim websitenin kaynağını döner.
-            String jsonString = httpHandler.makeServiceCall(url);
+            String jsonString = httpHandler.sunucuBaglantisi(url);
 
             Log.d("JSON_RESPONSE ",jsonString);
 
@@ -78,19 +78,19 @@ public class MrktActivity extends AppCompatActivity {
                     JSONObject jsonObject=new JSONObject(jsonString);
                     Log.d("json object bölümü : ","çalıştı");
 
-                        JSONArray Calfour_Sa = jsonObject.getJSONArray("Marketler");
+                        JSONArray marketler = jsonObject.getJSONArray("Marketler");
                         //JSONArray Migros = jsonObject.getJSONArray("Migros");
                         Log.d("json array bölümü : ","çalıştı");
-                        for (int i = 0; i<Calfour_Sa.length();i++){
+                        for (int i = 0; i<marketler.length();i++){
                             //Her bir icecek bloğu object olarak geçiyor.
                             //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
-                            JSONObject calfourSaJSONObject= Calfour_Sa.getJSONObject(i);
+                            JSONObject calfourSaJSONObject= marketler.getJSONObject(i);
                             Log.d("Marketler : ",calfourSaJSONObject.toString());
                             String isim=calfourSaJSONObject.getString("isim");
                             String foto=calfourSaJSONObject.getString("foto_path");
                             //Double enlem=Double.valueOf(calfourSaJSONObject.getString("enlem"));
                             //Double boylam =Double.valueOf(calfourSaJSONObject.getString("boylam"));
-                            Integer sube_sayisi = Integer.valueOf(Calfour_Sa.length());
+                            Integer sube_sayisi = Integer.valueOf(marketler.length());
                             Market CalfourMarket = new Market(isim,foto,sube_sayisi);
                             marketArrayList.add(CalfourMarket);
 

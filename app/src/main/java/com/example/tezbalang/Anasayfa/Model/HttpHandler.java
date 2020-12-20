@@ -13,15 +13,16 @@ import javax.net.ssl.HttpsURLConnection;
 public class HttpHandler {
     public HttpHandler() {
     }
-    public String makeServiceCall(String requestUrl){
+    public String sunucuBaglantisi(String requestUrl){
         String response = null;
-        try {
+        try {//bağlantıda sorun olabilme ihtimali için hata yakala blokları kullanılmalı.
             URL url = new URL(requestUrl);
             //githuba gider veriyi okur.Get ve post işemide yapabilir.
+            //HttpUrlConnection ile http bağlantısı oluşturuluyor.
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             InputStream in = new BufferedInputStream(connection.getInputStream());
-            response = convertStreamtoString(in);
+            response = veriFormatıCevirme(in);
         }
         catch (MalformedURLException e ){
             e.printStackTrace();
@@ -29,16 +30,18 @@ public class HttpHandler {
         catch (IOException e){
             e.printStackTrace();
         }
-        return  response;
+        return  response; //json dosya içerisindek bütün verileri aynı formatta  döndürür.
     }
-     private String convertStreamtoString(InputStream is){
+     private String veriFormatıCevirme(InputStream is){
+        //Buffrered reader Web sunucudan dosyadan okur gibi satır satır veri okumaya yarıyor.
          BufferedReader reader = new BufferedReader(new InputStreamReader( (is)));
+         //Bu bölümden sonra veriler staır satır okunur.
          StringBuilder sb = new StringBuilder();
 
          String satir ="";
          try{
-             while ((satir = reader.readLine()) != null){
-                 sb.append(satir).append("\n");
+             while ((satir = reader.readLine()) != null){//dosya sonuna gelene kadar oku
+                 sb.append(satir).append("\n");//satır sonuna geldiyse çık.alt satıra geç.string builder içerisine satırı ekle.
              }
          }catch (IOException e){
 
