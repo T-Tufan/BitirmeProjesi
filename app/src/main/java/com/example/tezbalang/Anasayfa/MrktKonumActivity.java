@@ -127,8 +127,6 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
                     catch (IOException e){
                         e.printStackTrace();
                     }
-
-
                     Address address = addressList.get(0);
                     LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
                     mMap.addMarker(new MarkerOptions().position(latLng).title("Aranan Konum : "+location));
@@ -140,20 +138,9 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
 
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-
 
         mMap.setTrafficEnabled(true);
 
@@ -259,6 +246,7 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
                     Log.d("Eşlesme Durumu","Market ismi eşleşmedi");
                 }
             }
+            //Veri kontrolü yapılan log kayıtları
             Log.d("Acıklama Listesi ",String.valueOf(aciklamaList.size()));
             Log.d("Boylam Listesi ",boylamList.get(0)+" "+boylamList.get(1)+" "+boylamList.get(2));
             Log.d("Enlem Listesi ",enlemList.get(0)+" "+enlemList.get(1)+" "+enlemList.get(2));
@@ -279,19 +267,13 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
             String jsonString = httpHandler.sunucuBaglantisi(url);
             Log.d("JSON_RESPONSE ",jsonString);
 
-           /* Intent intent = getIntent();
-            String str = intent.getStringExtra("jsonArray");*/
             //işlem gerçekleştirilirken yapılan işlemler
             if (jsonString !=null){
                 //sayfa iceriği boş değilse
                 try {
                     JSONObject jsonObject=new JSONObject(jsonString);
 
-                    JSONArray calfour_Sa = jsonObject.getJSONArray("Calfour-Sa");
-                    JSONArray migros = jsonObject.getJSONArray("Migros");
-
-                    jsonArrayArrayListMarket.add(calfour_Sa);
-                    jsonArrayArrayListMarket.add(migros);
+                    jsonArrayArrayListMarket = BarkodOkumaActivity.JsonArraysMethod(jsonObject,jsonArrayArrayListMarket,"Market");
 
                     for (int k = 0; k<jsonArrayArrayListMarket.size(); k++){
                         Log.d("Json array dizi boyutu ", String.valueOf(jsonArrayArrayListMarket.size()));
@@ -310,31 +292,6 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
                             marketArrayList.add(marktInfo);
                         }
                     }
-                    /*for (int i = 0; i<calfour_Sa.length();i++){
-                        //Her bir adres verisine object olarak geçiyor.
-                        //Her bir market verisine döngü içersinde tek tek ulaşılıyor.
-                        JSONObject calfourjson= calfour_Sa.getJSONObject(i);
-                        String isim=calfourjson.getString("isim");
-                        String aciklama=calfourjson.getString("aciklama");
-                        Double enlem=Double.valueOf(calfourjson.getString("enlem"));
-                        Double boylam =Double.valueOf(calfourjson.getString("boylam"));
-                        String foto_path = calfourjson.getString("foto_path");
-                        Market CalfourMarket = new Market(isim,aciklama,boylam,enlem,foto_path);
-                        marketArrayList.add(CalfourMarket);
-                    }
-                    for (int i = 0; i<migros.length();i++){
-                        //Her bir adres verisine object olarak geçiyor.
-                        //Her bir market verisine döngü içersinde tek tek ulaşılıyor.
-                        JSONObject migrosjson= migros.getJSONObject(i);
-                        String isim=migrosjson.getString("isim");
-                        String aciklama=migrosjson.getString("aciklama");
-                        Double enlem=Double.valueOf(migrosjson.getString("enlem"));
-                        Double boylam =Double.valueOf(migrosjson.getString("boylam"));
-                        String foto_path = migrosjson.getString("foto_path");
-                        Market MigrosMarket = new Market(isim,aciklama,boylam,enlem,foto_path);
-                        marketArrayList.add(MigrosMarket);
-                    }*/
-
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -350,7 +307,6 @@ public class MrktKonumActivity extends FragmentActivity implements OnMapReadyCal
     public void Konumlar (GoogleMap mMap, ArrayList<String> aciklamaList, ArrayList<Double> enlemList, ArrayList<Double> boylamList, ArrayList<Bitmap> icon){
         onStart();
         for (int i=0;i<aciklamaList.size();i++){
-
             Bitmap kucukLogo = Bitmap.createScaledBitmap(logoList.get(i), 100, 100,false);
             Log.d("Harita Konum Sayısı ",String.valueOf(i));
             LatLng konum = new LatLng(enlemList.get(i),boylamList.get(i));

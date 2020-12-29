@@ -35,7 +35,7 @@ public class HttpHandler {
      private String veriFormatıCevirme(InputStream is){
         //Buffrered reader Web sunucudan dosyadan okur gibi satır satır veri okumaya yarıyor.
          BufferedReader reader = new BufferedReader(new InputStreamReader( (is)));
-         //Bu bölümden sonra veriler staır satır okunur.
+         //Bu bölümden sonra veriler satır satır okunur.
          StringBuilder sb = new StringBuilder();
 
          String satir ="";

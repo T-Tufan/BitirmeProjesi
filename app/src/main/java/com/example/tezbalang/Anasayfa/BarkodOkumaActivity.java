@@ -10,18 +10,19 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 
-import com.example.tezbalang.Anasayfa.Adapter.ÜrünlerAdapter;
+import com.example.tezbalang.Anasayfa.Adapter.UrunlerDetayAdapter;
 import com.example.tezbalang.Anasayfa.Model.HttpHandler;
 import com.example.tezbalang.Anasayfa.Model.Ürünler;
 import com.example.tezbalang.R;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class BarkodOkumaActivity extends AppCompatActivity {
-    private ÜrünlerAdapter urunadapter;
+    private UrunlerDetayAdapter urunadapter;
     public HttpHandler httpHandler;
     ProgressDialog progressDialog; //Veri çekilirken dönen yuvarlak
     ListView list;
@@ -53,7 +54,7 @@ public class BarkodOkumaActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             //işlem tamamlandığında
             super.onPostExecute(aVoid);
-            urunadapter = new ÜrünlerAdapter(BarkodOkumaActivity.this,ürünlerArrayList);
+            urunadapter = new UrunlerDetayAdapter(BarkodOkumaActivity.this,ürünlerArrayList);
             list.setAdapter(urunadapter);
             if (progressDialog.isShowing()){
                 progressDialog.dismiss();//progress dialog kapatılır.
@@ -68,7 +69,6 @@ public class BarkodOkumaActivity extends AppCompatActivity {
             Log.d("JSON_RESPONSE ",jsonString);
             Intent intent = getIntent();
             String barc = intent.getStringExtra("BarkodNo");
-            String str = intent.getStringExtra("ktgr");
            /* Intent intent = getIntent();
             String str = intent.getStringExtra("jsonArray");*/
             //işlem gerçekleştirilirken yapılan işlemler
@@ -76,20 +76,10 @@ public class BarkodOkumaActivity extends AppCompatActivity {
                 //sayfa iceriği boş değilse
                 try {
                     JSONObject jsonObject=new JSONObject(jsonString);
-
-                    JSONArray icecekler = jsonObject.getJSONArray("İcecekler");
-                    JSONArray et_ve_süt_ürünleri = jsonObject.getJSONArray("Et ve Süt Ürünleri");
-                    JSONArray teknoloji = jsonObject.getJSONArray("Teknoloji Ürünleri");
-                    JSONArray kisiselBakim = jsonObject.getJSONArray("KisiselBakim");
-
-                    jsonArrayArrayListBarcode.add(icecekler);
-                    jsonArrayArrayListBarcode.add(et_ve_süt_ürünleri);
-                    jsonArrayArrayListBarcode.add(teknoloji);
-                    jsonArrayArrayListBarcode.add(kisiselBakim);
+                    jsonArrayArrayListBarcode = JsonArraysMethod(jsonObject,jsonArrayArrayListBarcode,"Ürünler");
                     for (int k = 0; k<jsonArrayArrayListBarcode.size(); k++){
                         for (int i = 0; i<jsonArrayArrayListBarcode.get(k).length();i++){
-                            //Her bir icecek bloğu object olarak geçiyor.
-                            //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
+
                             JSONObject ürüns= jsonArrayArrayListBarcode.get(k).getJSONObject(i);
                             String barkod=ürüns.getString("barkod");
                             String isim=ürüns.getString("isim");
@@ -113,32 +103,6 @@ public class BarkodOkumaActivity extends AppCompatActivity {
                             }
                         }
                     }
-                    /*for (int i = 0; i<ürünler.length();i++){
-                        //Her bir icecek bloğu object olarak geçiyor.
-                        //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
-                        JSONObject ürüns= ürünler.getJSONObject(i);
-                        String barkod=ürüns.getString("barkod");
-                        String isim=ürüns.getString("isim");
-                        String foto_path=ürüns.getString("foto-path");
-                        String market = ürüns.getString("market");
-                        String stok= ürüns.getString("stok");
-                        double fiyat = ürüns.getDouble("fiyat");
-                        String kategori=ürüns.getString("kategori");
-                        String acıklama = ürüns.getString("aciklama");
-
-                        Ürünler ürün = new Ürünler(barkod,fiyat,isim,foto_path,market,stok,kategori,acıklama);
-
-                        Log.d("Ürün barkod",ürün.getBarkod());
-                        Log.d("Barkod Bilgi",barc);
-                        if (ürün.getBarkod().equals(barc)){
-                            ürünlerArrayList.add(ürün);
-                            Log.d("Barkod Eşleşti",barc+" : "+ürün.getBarkod());
-                        }
-                        else{
-                            Log.d("Ürün Bilgi","Ürün barkodu eşleşmedi");
-                        }
-                    }*/
-
                 }catch (Exception e){
                     e.printStackTrace();
                 }
@@ -149,5 +113,50 @@ public class BarkodOkumaActivity extends AppCompatActivity {
             }
             return null;
         }
+    }
+    interface myInterface{
+        ArrayList<JSONArray> products() throws JSONException;
+        ArrayList<JSONArray> markets() throws JSONException;
+    }
+    static ArrayList<JSONArray> JsonArraysMethod(final JSONObject jsonObject, ArrayList<JSONArray> jsonArrays ,String type) throws JSONException {
+        final ArrayList<JSONArray> finalJsonArrays = jsonArrays;
+        myInterface m= new myInterface(){
+
+            @Override
+            public ArrayList<JSONArray> products() throws JSONException {
+                JSONArray icecekler = jsonObject.getJSONArray("İcecekler");
+                JSONArray et_ve_süt_ürünleri = jsonObject.getJSONArray("Et ve Süt Ürünleri");
+                JSONArray teknoloji = jsonObject.getJSONArray("Teknoloji Ürünleri");
+                JSONArray kisiselBakim = jsonObject.getJSONArray("KisiselBakim");
+
+                finalJsonArrays.add(icecekler);
+                finalJsonArrays.add(et_ve_süt_ürünleri);
+                finalJsonArrays.add(teknoloji);
+                finalJsonArrays.add(kisiselBakim);
+
+                return finalJsonArrays;
+            }
+
+            @Override
+            public ArrayList<JSONArray> markets() throws JSONException {
+                JSONArray calfour_Sa = jsonObject.getJSONArray("Calfour-Sa");
+                JSONArray migros = jsonObject.getJSONArray("Migros");
+
+                finalJsonArrays.add(calfour_Sa);
+                finalJsonArrays.add(migros);
+
+                return finalJsonArrays;
+            }
+        };
+        if (type.equals("Ürünler")){
+            jsonArrays = m.products();
+            Log.d("OKunan JsonArraysMethodDeğeri ","   : Ürünler");
+        }
+        else if (type.equals("Market")){
+            jsonArrays = m.markets();
+            Log.d("OKunan JsonArraysMethodDeğeri ","   : Market");
+        }
+
+        return jsonArrays;
     }
 }

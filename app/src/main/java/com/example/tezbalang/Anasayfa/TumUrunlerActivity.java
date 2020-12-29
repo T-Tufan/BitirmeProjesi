@@ -6,13 +6,12 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.util.Log;
 import android.widget.ListView;
 import android.widget.SearchView;
 
 
-import com.example.tezbalang.Anasayfa.Adapter.KategorilerAdapter;
+import com.example.tezbalang.Anasayfa.Adapter.UrunlerAdapter;
 import com.example.tezbalang.Anasayfa.Model.HttpHandler;
 import com.example.tezbalang.Anasayfa.Model.ÜrünGenelBilgi;
 import com.example.tezbalang.R;
@@ -23,7 +22,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class TumUrunlerActivity extends AppCompatActivity{
-    private KategorilerAdapter urunadapter;
+    private UrunlerAdapter urunadapter;
     public HttpHandler httpHandler;
     ProgressDialog progressDialog; //Veri çekilirken dönen yuvarlak
     ListView list;
@@ -39,31 +38,6 @@ public class TumUrunlerActivity extends AppCompatActivity{
 
         new getAllProducts().execute();
     }
-
-
-
-   /*@SuppressLint("ResourceType")
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.layout.menu_arama,menu);
-        aramakutusu= (SearchView) menu.findItem(R.id.make_search).getActionView();
-        aramakutusu.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Log.d("Text Submit : ",query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                Log.d("Text Cahnge : ",newText);
-                return false;
-            }
-
-        });
-        return true;
-    }*/
 
     private class  getAllProducts extends AsyncTask<Void,Void,Void>  {
         ArrayList<ÜrünGenelBilgi> ürünlerArrayList = new ArrayList<>();
@@ -82,7 +56,7 @@ public class TumUrunlerActivity extends AppCompatActivity{
         protected void onPostExecute(Void aVoid) {
             //işlem tamamlandığında
             super.onPostExecute(aVoid);
-            urunadapter = new KategorilerAdapter(TumUrunlerActivity.this,ürünlerArrayList);
+            urunadapter = new UrunlerAdapter(TumUrunlerActivity.this,ürünlerArrayList);
             list.setAdapter(urunadapter);
 
             if (progressDialog.isShowing()){
@@ -104,21 +78,14 @@ public class TumUrunlerActivity extends AppCompatActivity{
                 try {
                     JSONObject jsonObject=new JSONObject(jsonString);
                     //Json dosyalarının ilgili kısımları alınır.
-                    JSONArray icecekler = jsonObject.getJSONArray("İcecekler");
-                    JSONArray et_ve_süt_ürünleri = jsonObject.getJSONArray("Et ve Süt Ürünleri");
-                    JSONArray teknoloji = jsonObject.getJSONArray("Teknoloji Ürünleri");
-                    JSONArray kisiselBakim = jsonObject.getJSONArray("KisiselBakim");
+                    jsonArrayArrayList = BarkodOkumaActivity.JsonArraysMethod(jsonObject,jsonArrayArrayList,"Ürünler");
 
-                    jsonArrayArrayList.add(icecekler);
-                    jsonArrayArrayList.add(et_ve_süt_ürünleri);
-                    jsonArrayArrayList.add(teknoloji);
-                    jsonArrayArrayList.add(kisiselBakim);
                     for (int k = 0; k<jsonArrayArrayList.size(); k++){
                         Log.d("Json array dizi boyutu ", String.valueOf(jsonArrayArrayList.size()));
                         for (int i = 0; i<jsonArrayArrayList.get(k).length();i++){
                             Log.d("Json array dizi elemanları ", String.valueOf(jsonArrayArrayList.get(k)));
-                            //Her bir icecek bloğu object olarak geçiyor.
-                            //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
+                            //Her bir ürün bloğu object olarak geçiyor.
+                            //Her bir ürün bloğuna döngü içersinde tek tek ulaşılıyor.
                             JSONObject ürüns= jsonArrayArrayList.get(k).getJSONObject(i);
                             String barkod=ürüns.getString("barkod");
                             String isim=ürüns.getString("isim");
@@ -129,54 +96,6 @@ public class TumUrunlerActivity extends AppCompatActivity{
                             ürünlerArrayList.add(ürün);
                         }
                     }
-                    /*for (int i = 0; i<icecekler.length();i++){
-                        //Her bir icecek bloğu object olarak geçiyor.
-                        //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
-                        JSONObject ürüns= icecekler.getJSONObject(i);
-                        String barkod=ürüns.getString("barkod");
-                        String isim=ürüns.getString("isim");
-                        String foto_path=ürüns.getString("foto-path");
-                        String kategori =ürüns.getString("kategori");
-
-                        ÜrünGenelBilgi ürün = new ÜrünGenelBilgi(barkod,isim,foto_path,kategori);
-                        ürünlerArrayList.add(ürün);
-                    }
-                    for (int j = 0; j<et_ve_süt_ürünleri.length();j++){
-                        //Her bir icecek bloğu object olarak geçiyor.
-                        //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
-                        JSONObject ürüns= et_ve_süt_ürünleri.getJSONObject(j);
-                        String barkod=ürüns.getString("barkod");
-                        String isim=ürüns.getString("isim");
-                        String foto_path=ürüns.getString("foto-path");
-                        String kategori =ürüns.getString("kategori");
-
-                        ÜrünGenelBilgi ürün = new ÜrünGenelBilgi(barkod,isim,foto_path,kategori);
-                        ürünlerArrayList.add(ürün);
-                    }
-                    for (int k = 0; k<kisiselBakim.length();k++){
-                        //Her bir icecek bloğu object olarak geçiyor.
-                        //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
-                        JSONObject ürüns= kisiselBakim.getJSONObject(k);
-                        String barkod=ürüns.getString("barkod");
-                        String isim=ürüns.getString("isim");
-                        String foto_path=ürüns.getString("foto-path");
-                        String kategori =ürüns.getString("kategori");
-
-                        ÜrünGenelBilgi ürün = new ÜrünGenelBilgi(barkod,isim,foto_path,kategori);
-                        ürünlerArrayList.add(ürün);
-                    }
-                    for (int k = 0; k<teknoloji.length();k++){
-                        //Her bir icecek bloğu object olarak geçiyor.
-                        //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
-                        JSONObject ürüns= teknoloji.getJSONObject(k);
-                        String barkod=ürüns.getString("barkod");
-                        String isim=ürüns.getString("isim");
-                        String foto_path=ürüns.getString("foto-path");
-                        String kategori =ürüns.getString("kategori");
-
-                        ÜrünGenelBilgi ürün = new ÜrünGenelBilgi(barkod,isim,foto_path,kategori);
-                        ürünlerArrayList.add(ürün);
-                    }*/
                 }catch (Exception e){
                     e.printStackTrace();
                 }

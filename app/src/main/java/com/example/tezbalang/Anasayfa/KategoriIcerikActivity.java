@@ -13,7 +13,7 @@ import android.util.Log;
 import android.widget.ListView;
 
 
-import com.example.tezbalang.Anasayfa.Adapter.KategorilerAdapter;
+import com.example.tezbalang.Anasayfa.Adapter.UrunlerAdapter;
 import com.example.tezbalang.Anasayfa.Model.HttpHandler;
 import com.example.tezbalang.Anasayfa.Model.ÜrünGenelBilgi;
 import com.example.tezbalang.R;
@@ -24,7 +24,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class KategoriIcerikActivity extends AppCompatActivity {
-    private KategorilerAdapter urunadapter;
+    private UrunlerAdapter urunadapter;
     public HttpHandler httpHandler;
     ProgressDialog progressDialog; //Veri çekilirken dönen yuvarlak
     ListView list;
@@ -60,7 +60,7 @@ public class KategoriIcerikActivity extends AppCompatActivity {
             //işlem tamamlandığında
             super.onPostExecute(aVoid);
 
-            urunadapter = new KategorilerAdapter(KategoriIcerikActivity.this, ürünGenelBilgiArrayList);
+            urunadapter = new UrunlerAdapter(KategoriIcerikActivity.this, ürünGenelBilgiArrayList);
             list.setAdapter(urunadapter);
             if (progressDialog.isShowing()){
                 progressDialog.dismiss();//progress dialog kapatılır.
@@ -80,10 +80,9 @@ public class KategoriIcerikActivity extends AppCompatActivity {
                 //sayfa iceriği boş değilse
                 try {
                     JSONObject jsonObject=new JSONObject(jsonString);
-
                     JSONArray kategoriler = jsonObject.getJSONArray(str);
-                    for (int i = 0; i<kategoriler.length();i++){
 
+                    for (int i = 0; i<kategoriler.length();i++){
                         JSONObject kategorilerJSONObject= kategoriler.getJSONObject(i);
                         String barkod=kategorilerJSONObject.getString("barkod");
                         String isim=kategorilerJSONObject.getString("isim");

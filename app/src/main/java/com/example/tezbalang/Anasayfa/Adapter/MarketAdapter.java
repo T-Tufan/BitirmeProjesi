@@ -49,7 +49,6 @@ public class MarketAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-
         View view = layoutInflater.inflate(R.layout.mrkt_card_tasarim, null);
 
         ImageView Market_Foto = (ImageView) view.findViewById(R.id.mrkt_foto);
@@ -61,6 +60,7 @@ public class MarketAdapter extends BaseAdapter {
         Market_Isim.setText(markets.get(position).getMarket_isim().toString());
         //Sube_Sayi.setText(markets.get(position).getMarket_sube_sayi().toString());
         final String market_isim = markets.get(position).getMarket_isim().toString();
+
         Konum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

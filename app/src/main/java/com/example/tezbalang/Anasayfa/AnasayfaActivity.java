@@ -6,6 +6,7 @@ import androidx.cardview.widget.CardView;
 
 import android.Manifest;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.Settings;
 import android.widget.SearchView;
 
@@ -109,5 +110,6 @@ public class AnasayfaActivity extends AppCompatActivity {
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
+
 
 }

@@ -20,30 +20,17 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KategorilerAdapter extends BaseAdapter {
+public class UrunlerAdapter extends BaseAdapter {
     Context context;
     ArrayList<ÜrünGenelBilgi> ürünGenelBilgis;
     LayoutInflater layoutInflater;
-    ArrayList<String> aramalistesi;
-    private List<ÜrünGenelBilgi> kategorilersFull;
 
-    /*public KategorilerAdapter(Activity activity, ArrayList<Kategoriler> kategorilers,ArrayList<String> aramalistesi) {
-        this.context = activity;
-        this.aramalistesi = aramalistesi;
-        this.kategorilers = kategorilers;
-        kategorilersFull = new ArrayList<>(kategorilers);
-        this.layoutInflater = (LayoutInflater) context.getSystemService(Service.LAYOUT_INFLATER_SERVICE);
-
-    }*/
-    public KategorilerAdapter(Activity activity, ArrayList<ÜrünGenelBilgi> ürünGenelBilgis) {
+    public UrunlerAdapter(Activity activity, ArrayList<ÜrünGenelBilgi> ürünGenelBilgis) {
         this.context = activity;
         this.ürünGenelBilgis = ürünGenelBilgis;
-        kategorilersFull = new ArrayList<>(ürünGenelBilgis);
         this.layoutInflater = (LayoutInflater) context.getSystemService(Service.LAYOUT_INFLATER_SERVICE);
 
     }
-
-
 
     @Override
     public int getCount() {
@@ -65,15 +52,11 @@ public class KategorilerAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-           /* ArrayAdapter<String> adapter =  new ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, android.R.id.text1,aramalistesi);
-            Log.d("ADAPTER SONUCU :",aramalistesi.get(0)+" "+aramalistesi.get(1).toString());*/
-            View view = layoutInflater.inflate(R.layout.urunler_card_tasarim, null);
 
+            View view = layoutInflater.inflate(R.layout.urunler_card_tasarim, null);
 
             ImageView Foto = (ImageView) view.findViewById(R.id.urun1foto);
             TextView Isim = (TextView) view.findViewById(R.id.urun1isim);
-
-
 
             Isim.setText(ürünGenelBilgis.get(position).getIsim());
             Picasso.with(context).load(ürünGenelBilgis.get(position).getFoto_path()).into(Foto);
@@ -82,7 +65,6 @@ public class KategorilerAdapter extends BaseAdapter {
                 @Override
                 public void onClick(View v) {
                     String barc= ürünGenelBilgis.get(position).getBarkod();
-                    String foto_isim = ürünGenelBilgis.get(position).getIsim();
                     String ktgr = ürünGenelBilgis.get(position).getKategori();
                     Toast.makeText(context, ürünGenelBilgis.get(position).getIsim() + " listeleniyor...", Toast.LENGTH_SHORT).show();
                     Intent ıntent = new Intent(context, UrunDetayActivity.class);

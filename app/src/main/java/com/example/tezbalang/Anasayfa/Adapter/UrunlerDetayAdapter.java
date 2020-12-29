@@ -25,12 +25,12 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-public class ÜrünlerAdapter extends BaseAdapter {
+public class UrunlerDetayAdapter extends BaseAdapter {
     Context context;
     ArrayList<Ürünler> ürünlers;
     LayoutInflater layoutInflater;
 
-    public ÜrünlerAdapter(Activity activity, ArrayList<Ürünler> ürünlers){
+    public UrunlerDetayAdapter(Activity activity, ArrayList<Ürünler> ürünlers){
         this.context=activity;
         this.ürünlers = ürünlers;
         this.layoutInflater = (LayoutInflater) context.getSystemService(Service.LAYOUT_INFLATER_SERVICE);
@@ -67,6 +67,7 @@ public class ÜrünlerAdapter extends BaseAdapter {
         Market.setText(Html.fromHtml(ürünlers.get(position).getMarket()).toString());
         Market.setMovementMethod(LinkMovementMethod.getInstance());
         final String market_isim = ürünlers.get(position).getMarket();
+
         Konum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +86,6 @@ public class ÜrünlerAdapter extends BaseAdapter {
 
              }
          });
-
         return view;
     }
 }

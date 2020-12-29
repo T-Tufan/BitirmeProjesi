@@ -108,13 +108,4 @@ private  String acıklama;
                 ", acıklama='" + acıklama + '\'' +
                 '}';
     }
-
-/*
-    int barkod=icecek.getInt("barkod");
-    String isim=icecek.getString("isim");
-    String foto_path=icecek.getString("foto-path");
-    String market = icecek.getString("market");
-    String stok= icecek.getString("stok");
-    int fiyat = icecek.getInt("fiyat");
-    String acıklama = icecek.getString("açıklama");*/
 }

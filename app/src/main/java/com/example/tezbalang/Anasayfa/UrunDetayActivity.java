@@ -10,7 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 
-import com.example.tezbalang.Anasayfa.Adapter.ÜrünlerAdapter;
+import com.example.tezbalang.Anasayfa.Adapter.UrunlerDetayAdapter;
 import com.example.tezbalang.Anasayfa.Model.HttpHandler;
 import com.example.tezbalang.Anasayfa.Model.Ürünler;
 import com.example.tezbalang.R;
@@ -21,7 +21,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class UrunDetayActivity extends AppCompatActivity {
-    private ÜrünlerAdapter urunadapter;
+    private UrunlerDetayAdapter urunadapter;
     public HttpHandler httpHandler;
     ProgressDialog progressDialog; //Veri çekilirken dönen yuvarlak
     ListView list;
@@ -53,7 +53,7 @@ public class UrunDetayActivity extends AppCompatActivity {
         protected void onPostExecute(Void aVoid) {
             //işlem tamamlandığında
             super.onPostExecute(aVoid);
-            urunadapter = new ÜrünlerAdapter(UrunDetayActivity.this,ürünlerArrayList);
+            urunadapter = new UrunlerDetayAdapter(UrunDetayActivity.this,ürünlerArrayList);
             list.setAdapter(urunadapter);
             if (progressDialog.isShowing()){
                 progressDialog.dismiss();//progress dialog kapatılır.
@@ -70,15 +70,10 @@ public class UrunDetayActivity extends AppCompatActivity {
             Log.d("JSON_RESPONSE ",jsonString);
             Intent intent = getIntent();
 
-            //Diğer sayfalardan gelen veriler
+            //Diğer sayfalardan gelen veriler alınıp bir değişkene atılıyor.
             String barc = intent.getStringExtra("barkod");
             String foto_isim = intent.getStringExtra("Foto_urun");
             String str = intent.getStringExtra("ktgr");
-
-            //Kategoriler fotoğraf çekme özelliğinde kullanılmak üzere listeye atılıyor.
-            ArrayList<String> kategori_tipleri = new ArrayList<>();
-            kategori_tipleri.add("icecekler");
-            kategori_tipleri.add("Et ve Süt Ürünleri");
 
             //Diğer sayfalardan gelen veriler log kayıtlarında kontrol ediliyor.
             Log.d("Barkod veya Fotoğraf ismi veya ktgr : ",barc+" "+foto_isim+" "+str);
@@ -97,8 +92,7 @@ public class UrunDetayActivity extends AppCompatActivity {
                         JSONArray ürünler = jsonObject.getJSONArray(str);
                         Log.d("json array bölümü : ","çalıştı");
                         for (int i = 0; i<ürünler.length();i++){
-                            //Her bir icecek bloğu object olarak geçiyor.
-                            //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
+
                             JSONObject ürüns= ürünler.getJSONObject(i);
                             String barkod=ürüns.getString("barkod");
                             String isim=ürüns.getString("isim");
@@ -123,21 +117,12 @@ public class UrunDetayActivity extends AppCompatActivity {
                     }
                     //Fotoğraftan tanıma bölümünden gelinmiş ise burası çalışır.
                     else {
-                            JSONArray icecekler = jsonObject.getJSONArray("İcecekler");
-                            JSONArray et_ve_süt_ürünleri = jsonObject.getJSONArray("Et ve Süt Ürünleri");
-                            JSONArray teknoloji = jsonObject.getJSONArray("Teknoloji Ürünleri");
-                            JSONArray kisiselBakim = jsonObject.getJSONArray("KisiselBakim");
-
-                            jsonArrayArrayList2.add(icecekler);
-                            jsonArrayArrayList2.add(et_ve_süt_ürünleri);
-                            jsonArrayArrayList2.add(teknoloji);
-                            jsonArrayArrayList2.add(kisiselBakim);
+                        jsonArrayArrayList2 = BarkodOkumaActivity.JsonArraysMethod(jsonObject,jsonArrayArrayList2,"Ürünler");
 
                         for (int k = 0; k<jsonArrayArrayList2.size(); k++) {
                             Log.d("json array bölümü : ","çalıştı");
                             for (int i = 0; i<jsonArrayArrayList2.get(k).length();i++) {
-                                //Her bir icecek bloğu object olarak geçiyor.
-                                //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
+
                                 JSONObject ürüns = jsonArrayArrayList2.get(k).getJSONObject(i);
                                 String barkod = ürüns.getString("barkod");
                                 String isim = ürüns.getString("isim");
@@ -158,29 +143,6 @@ public class UrunDetayActivity extends AppCompatActivity {
                                 }
                             }
                         }
-                        /*Log.d("json array bölümü : ","çalıştı");
-                        for (int i = 0; i<ürünler.length();i++) {
-                            //Her bir icecek bloğu object olarak geçiyor.
-                            //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
-                            JSONObject ürüns = ürünler.getJSONObject(i);
-                            String barkod = ürüns.getString("barkod");
-                            String isim = ürüns.getString("isim");
-                            String foto_path = ürüns.getString("foto-path");
-                            String market = ürüns.getString("market");
-                            String stok = ürüns.getString("stok");
-                            double fiyat = ürüns.getDouble("fiyat");
-                            String kategori = ürüns.getString("kategori");
-                            String acıklama = ürüns.getString("aciklama");
-
-                            Ürünler ürün = new Ürünler(barkod, fiyat, isim, foto_path, market, stok, kategori, acıklama);
-                            if (ürün.getIsim().equals(foto_isim)){
-                            ürünlerArrayList.add(ürün);
-                            Log.d("Foto ismi Eşleşti",foto_isim+" : "+ürün.getIsim());
-                        }
-                        else{
-                            Log.d("Ürün Bilgi","Fotoğrafa ait ürün bulunamadı.");
-                        }
-                        }*/
                     }
 
                 }catch (Exception e){

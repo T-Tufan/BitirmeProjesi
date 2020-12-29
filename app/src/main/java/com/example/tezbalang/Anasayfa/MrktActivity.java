@@ -4,17 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 
 import com.example.tezbalang.Anasayfa.Adapter.MarketAdapter;
-import com.example.tezbalang.Anasayfa.Adapter.ÜrünlerAdapter;
 import com.example.tezbalang.Anasayfa.Model.HttpHandler;
 import com.example.tezbalang.Anasayfa.Model.Market;
-import com.example.tezbalang.Anasayfa.Model.Ürünler;
 import com.example.tezbalang.R;
 
 import org.json.JSONArray;
@@ -69,8 +66,6 @@ public class MrktActivity extends AppCompatActivity {
 
             Log.d("JSON_RESPONSE ",jsonString);
 
-
-
             //işlem gerçekleştirilirken yapılan işlemler
             if (jsonString !=null){
                 //json sayfa iceriği boş değilse
@@ -82,22 +77,15 @@ public class MrktActivity extends AppCompatActivity {
                         //JSONArray Migros = jsonObject.getJSONArray("Migros");
                         Log.d("json array bölümü : ","çalıştı");
                         for (int i = 0; i<marketler.length();i++){
-                            //Her bir icecek bloğu object olarak geçiyor.
-                            //Her bir içecek bloğuna döngü içersinde tek tek ulaşılıyor.
                             JSONObject calfourSaJSONObject= marketler.getJSONObject(i);
                             Log.d("Marketler : ",calfourSaJSONObject.toString());
                             String isim=calfourSaJSONObject.getString("isim");
                             String foto=calfourSaJSONObject.getString("foto_path");
-                            //Double enlem=Double.valueOf(calfourSaJSONObject.getString("enlem"));
-                            //Double boylam =Double.valueOf(calfourSaJSONObject.getString("boylam"));
                             Integer sube_sayisi = Integer.valueOf(marketler.length());
                             Market CalfourMarket = new Market(isim,foto,sube_sayisi);
                             marketArrayList.add(CalfourMarket);
-
                             //Log.d("STR Bilgi",str);
                         }
-
-
                 }catch (Exception e){
                     e.printStackTrace();
                 }

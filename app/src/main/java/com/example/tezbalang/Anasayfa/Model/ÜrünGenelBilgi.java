@@ -9,11 +9,6 @@ public class ÜrünGenelBilgi {
     public ÜrünGenelBilgi() {
     }
 
-    /*public Kategoriler(String barkod, String isim, String foto_path) {
-        this.barkod = barkod;
-        this.isim = isim;
-        this.foto_path = foto_path;
-    }*/
     public ÜrünGenelBilgi(String barkod, String isim, String foto_path, String kategori) {
         this.barkod = barkod;
         this.isim = isim;
