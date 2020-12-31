@@ -1,14 +1,10 @@
-package com.example.tezbalang.Anasayfa;
+package com.example.tezbalang.Anasayfa.AppPages;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
 import android.Manifest;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.provider.Settings;
-import android.widget.SearchView;
 
 import android.content.Intent;
 import android.os.Bundle;

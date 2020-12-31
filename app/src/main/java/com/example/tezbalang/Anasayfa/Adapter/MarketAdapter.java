@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.tezbalang.Anasayfa.Model.Market;
-import com.example.tezbalang.Anasayfa.MrktKonumActivity;
+import com.example.tezbalang.Anasayfa.AppPages.MrktKonumActivity;
 import com.example.tezbalang.R;
 import com.squareup.picasso.Picasso;
 

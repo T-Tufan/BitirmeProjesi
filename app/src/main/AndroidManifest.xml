@@ -33,17 +33,17 @@
             android:value="AIzaSyDKWqOlhNuJoeRZz2qLOCuLikyek8W0odo" />
 
         <activity
-            android:name=".Anasayfa.MrktKonumActivity"
+            android:name=".Anasayfa.AppPages.MrktKonumActivity"
             android:label="@string/title_activity_mrkt_konum" />
 
-        <activity android:name=".Anasayfa.MrktActivity" />
-        <activity android:name=".Anasayfa.FotoTanimaActivity" />
-        <activity android:name=".Anasayfa.BarkodOkumaActivity" />
-        <activity android:name=".Anasayfa.TumUrunlerActivity" />
-        <activity android:name=".Anasayfa.UrunDetayActivity" />
-        <activity android:name=".Anasayfa.KategoriIcerikActivity" />
-        <activity android:name=".Anasayfa.KategorilerActivity" />
-        <activity android:name=".Anasayfa.AnasayfaActivity"
+        <activity android:name=".Anasayfa.AppPages.MrktActivity" />
+        <activity android:name=".Anasayfa.AppPages.FotoTanimaActivity" />
+        <activity android:name=".Anasayfa.AppPages.BarkodOkumaActivity" />
+        <activity android:name=".Anasayfa.AppPages.TumUrunlerActivity" />
+        <activity android:name=".Anasayfa.AppPages.UrunDetayActivity" />
+        <activity android:name=".Anasayfa.AppPages.KategoriIcerikActivity" />
+        <activity android:name=".Anasayfa.AppPages.KategorilerActivity" />
+        <activity android:name=".Anasayfa.AppPages.AnasayfaActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

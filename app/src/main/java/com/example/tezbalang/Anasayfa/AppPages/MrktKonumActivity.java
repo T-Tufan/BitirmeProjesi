@@ -1,4 +1,4 @@
-package com.example.tezbalang.Anasayfa;
+package com.example.tezbalang.Anasayfa.AppPages;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;

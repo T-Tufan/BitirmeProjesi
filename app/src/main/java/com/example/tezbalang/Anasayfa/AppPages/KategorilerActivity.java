@@ -1,4 +1,4 @@
-package com.example.tezbalang.Anasayfa;
+package com.example.tezbalang.Anasayfa.AppPages;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.tezbalang.Anasayfa.AppPages.KategoriIcerikActivity;
 import com.example.tezbalang.R;
 public class KategorilerActivity extends AppCompatActivity {
     public LinearLayout icecekler_buton,etvesut_buton,teknolojik_buton,kisiselbakım_buton,meyvesebze_buton;

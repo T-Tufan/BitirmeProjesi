@@ -11,7 +11,7 @@
         android:background="@color/backgroundColor"
         android:orientation="vertical"
         android:padding="10dp"
-        tools:context=".Anasayfa.KategoriIcerikActivity">
+        tools:context=".Anasayfa.AppPages.KategoriIcerikActivity">
     <LinearLayout
         android:id="@+id/iceceklerLayout"
         android:layout_width="match_parent"

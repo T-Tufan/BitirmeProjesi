@@ -7,7 +7,7 @@
 
     android:layout_height="match_parent"
 
-    tools:context=".Anasayfa.FotoTanimaActivity">
+    tools:context=".Anasayfa.AppPages.FotoTanimaActivity">
 
 
     <Button

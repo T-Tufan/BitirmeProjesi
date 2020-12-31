@@ -1,14 +1,16 @@
-package com.example.tezbalang.Anasayfa;
+package com.example.tezbalang.Anasayfa.AppPages;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+
 import android.widget.ListView;
-import android.widget.SearchView;
 
 
 import com.example.tezbalang.Anasayfa.Adapter.UrunlerAdapter;
@@ -21,32 +23,33 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TumUrunlerActivity extends AppCompatActivity{
+public class KategoriIcerikActivity extends AppCompatActivity {
     private UrunlerAdapter urunadapter;
     public HttpHandler httpHandler;
     ProgressDialog progressDialog; //Veri çekilirken dönen yuvarlak
     ListView list;
-    SearchView aramakutusu;
 
     public static String url = "https://raw.githubusercontent.com/T-Tufan/Tez/master/kategoriler.json";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tum_urunler);
+        setContentView(R.layout.urun_liste);
         list = (ListView) findViewById(R.id.liste);
-        //async task bölümünün classı çağırılır.
 
-        new getAllProducts().execute();
+        new getCategoryData().execute();//async task bölümünün classı çağırılır.
+
+
     }
-
-    private class  getAllProducts extends AsyncTask<Void,Void,Void>  {
-        ArrayList<ÜrünGenelBilgi> ürünlerArrayList = new ArrayList<>();
-        ArrayList<JSONArray> jsonArrayArrayList = new ArrayList<>();
+    //web üzerinde işlem yapıyoruz.
+    //Kategorilerilere ait ürünleri çekiyoruz.3 parça olarak çekilecek.Gerceklesme zamanı ,öncesi  ve sonrasında ne olacak.
+    private class  getCategoryData extends AsyncTask<Void,Void,Void>{
+        ArrayList<ÜrünGenelBilgi> ürünGenelBilgiArrayList = new ArrayList<>();
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             //işlem başladığında çalışan kısımlar...
-            progressDialog = new ProgressDialog(TumUrunlerActivity.this);
+            progressDialog = new ProgressDialog(KategoriIcerikActivity.this);
             progressDialog.setMessage("Ürünler Listeleniyor...");
             progressDialog.setCancelable(false);
             progressDialog.show();
@@ -56,14 +59,13 @@ public class TumUrunlerActivity extends AppCompatActivity{
         protected void onPostExecute(Void aVoid) {
             //işlem tamamlandığında
             super.onPostExecute(aVoid);
-            urunadapter = new UrunlerAdapter(TumUrunlerActivity.this,ürünlerArrayList);
-            list.setAdapter(urunadapter);
 
+            urunadapter = new UrunlerAdapter(KategoriIcerikActivity.this, ürünGenelBilgiArrayList);
+            list.setAdapter(urunadapter);
             if (progressDialog.isShowing()){
                 progressDialog.dismiss();//progress dialog kapatılır.
             }
         }
-
 
         @SuppressLint("WrongThread")
         @Override
@@ -71,37 +73,33 @@ public class TumUrunlerActivity extends AppCompatActivity{
             httpHandler = new HttpHandler();//içerisine url olarak verdiğim websitenin kaynağını döner.
             String jsonString = httpHandler.sunucuBaglantisi(url);
             Log.d("JSON_RESPONSE ",jsonString);
-
+            Intent intent = getIntent();
+            String str = intent.getStringExtra("jsonArray");
             //işlem gerçekleştirilirken yapılan işlemler
             if (jsonString !=null){
                 //sayfa iceriği boş değilse
                 try {
                     JSONObject jsonObject=new JSONObject(jsonString);
-                    //Json dosyalarının ilgili kısımları alınır.
-                    jsonArrayArrayList = BarkodOkumaActivity.JsonArraysMethod(jsonObject,jsonArrayArrayList,"Ürünler");
+                    JSONArray kategoriler = jsonObject.getJSONArray(str);
 
-                    for (int k = 0; k<jsonArrayArrayList.size(); k++){
-                        Log.d("Json array dizi boyutu ", String.valueOf(jsonArrayArrayList.size()));
-                        for (int i = 0; i<jsonArrayArrayList.get(k).length();i++){
-                            Log.d("Json array dizi elemanları ", String.valueOf(jsonArrayArrayList.get(k)));
-                            //Her bir ürün bloğu object olarak geçiyor.
-                            //Her bir ürün bloğuna döngü içersinde tek tek ulaşılıyor.
-                            JSONObject ürüns= jsonArrayArrayList.get(k).getJSONObject(i);
-                            String barkod=ürüns.getString("barkod");
-                            String isim=ürüns.getString("isim");
-                            String foto_path=ürüns.getString("foto-path");
-                            String kategori =ürüns.getString("kategori");
+                    for (int i = 0; i<kategoriler.length();i++){
+                        JSONObject kategorilerJSONObject= kategoriler.getJSONObject(i);
+                        String barkod=kategorilerJSONObject.getString("barkod");
+                        String isim=kategorilerJSONObject.getString("isim");
+                        String foto_path=kategorilerJSONObject.getString("foto-path");
+                        String kategori = kategorilerJSONObject.getString("kategori");
 
-                            ÜrünGenelBilgi ürün = new ÜrünGenelBilgi(barkod,isim,foto_path,kategori);
-                            ürünlerArrayList.add(ürün);
-                        }
-                    }
-                }catch (Exception e){
+                        ÜrünGenelBilgi ürünGenelBilgi1 = new ÜrünGenelBilgi(barkod,isim,foto_path,kategori);
+                        ürünGenelBilgiArrayList.add(ürünGenelBilgi1);
+
+                      }
+                    }catch (Exception e){
                     e.printStackTrace();
                 }
             }
             else
             {
+
                 Log.d("Json_Response", "Veri yok");
             }
             return null;

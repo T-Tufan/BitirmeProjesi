@@ -13,12 +13,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tezbalang.Anasayfa.Model.ÜrünGenelBilgi;
-import com.example.tezbalang.Anasayfa.UrunDetayActivity;
+import com.example.tezbalang.Anasayfa.AppPages.UrunDetayActivity;
 import com.example.tezbalang.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class UrunlerAdapter extends BaseAdapter {
     Context context;

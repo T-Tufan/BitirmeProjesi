@@ -12,7 +12,7 @@
     android:background="@color/backgroundColor"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".Anasayfa.KategorilerActivity">
+    tools:context=".Anasayfa.AppPages.KategorilerActivity">
 
     <LinearLayout
         android:id="@+id/iceceklerLayout"

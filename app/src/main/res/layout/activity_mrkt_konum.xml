@@ -39,7 +39,7 @@
     android:layout_height="match_parent"
     android:layout_below="@id/lineer"
     android:layout_marginTop="0dp"
-    tools:context=".Anasayfa.MrktKonumActivity" />
+    tools:context=".Anasayfa.AppPages.MrktKonumActivity" />
 
     <ZoomControls
         Android:id="@+id/git_zoom"

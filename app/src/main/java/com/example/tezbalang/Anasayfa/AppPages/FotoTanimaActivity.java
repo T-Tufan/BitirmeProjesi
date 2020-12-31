@@ -1,29 +1,16 @@
-package com.example.tezbalang.Anasayfa;
+package com.example.tezbalang.Anasayfa.AppPages;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.camera.core.ImageAnalysis;
-import androidx.camera.core.ImageProxy;
 
-import android.Manifest;
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.tezbalang.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,7 +25,6 @@ import com.google.mlkit.vision.label.automl.AutoMLImageLabelerLocalModel;
 import com.google.mlkit.vision.label.automl.AutoMLImageLabelerOptions;
 import com.google.mlkit.vision.label.automl.AutoMLImageLabelerRemoteModel;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 public class FotoTanimaActivity extends AppCompatActivity{

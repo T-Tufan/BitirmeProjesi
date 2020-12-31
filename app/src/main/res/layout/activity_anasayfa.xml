@@ -7,7 +7,7 @@
     android:background="@color/backgroundColor"
     android:orientation="vertical"
     android:padding="10dp"
-    tools:context=".Anasayfa.AnasayfaActivity">
+    tools:context=".Anasayfa.AppPages.AnasayfaActivity">
 
     <LinearLayout
 

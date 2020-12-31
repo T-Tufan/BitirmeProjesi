@@ -14,12 +14,9 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.tezbalang.Anasayfa.AnasayfaActivity;
-import com.example.tezbalang.Anasayfa.BarkodOkumaActivity;
 import com.example.tezbalang.Anasayfa.Model.Ürünler;
-import com.example.tezbalang.Anasayfa.MrktKonumActivity;
+import com.example.tezbalang.Anasayfa.AppPages.MrktKonumActivity;
 import com.example.tezbalang.R;
 import com.squareup.picasso.Picasso;
 
