@@ -4,6 +4,7 @@ public class Ürünler {
 private String barkod;
 private double fiyat;
 private  String isim;
+private  String model_isim;
 private  String foto_path;
 private  String market;
 private  String stok;
@@ -13,6 +14,10 @@ private  String acıklama;
 
     public String getBarkod() {
         return barkod;
+    }
+
+    public String getModel_isim() {
+        return model_isim;
     }
 
     public double getFiyat() {
@@ -36,12 +41,14 @@ private  String acıklama;
         return acıklama;
     }
 
-    public Ürünler(String barkod, double fiyat, String isim, String foto_path, String market, String stok, String acıklama) {
+    public Ürünler(String barkod, double fiyat, String isim,String model_isim, String foto_path, String market, String stok,String kategori, String acıklama) {
         this.barkod = barkod;
         this.fiyat = fiyat;
         this.isim = isim;
+        this.model_isim = model_isim;
         this.foto_path = foto_path;
         this.market = market;
+        this.kategori = kategori;
         this.stok = stok;
         this.acıklama = acıklama;
     }
@@ -71,6 +78,10 @@ private  String acıklama;
 
     public void setIsim(String isim) {
         this.isim = isim;
+    }
+
+    public void setModel_isim(String model_isim) {
+        this.model_isim = model_isim;
     }
 
     public void setFoto_path(String foto_path) {

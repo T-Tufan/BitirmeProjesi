@@ -124,8 +124,10 @@ public class UrunDetayActivity extends AppCompatActivity {
                             for (int i = 0; i<jsonArrayArrayList2.get(k).length();i++) {
 
                                 JSONObject ürüns = jsonArrayArrayList2.get(k).getJSONObject(i);
+
                                 String barkod = ürüns.getString("barkod");
                                 String isim = ürüns.getString("isim");
+                                String model_isim = ürüns.getString("model-ismi");
                                 String foto_path = ürüns.getString("foto-path");
                                 String market = ürüns.getString("market");
                                 String stok = ürüns.getString("stok");
@@ -133,10 +135,10 @@ public class UrunDetayActivity extends AppCompatActivity {
                                 String kategori = ürüns.getString("kategori");
                                 String acıklama = ürüns.getString("aciklama");
 
-                                Ürünler ürün = new Ürünler(barkod, fiyat, isim, foto_path, market, stok, kategori, acıklama);
-                                if (ürün.getIsim().equals(foto_isim)){
+                                Ürünler ürün = new Ürünler(barkod, fiyat, isim,model_isim, foto_path, market, stok, kategori, acıklama);
+                                if (ürün.getModel_isim().equals(foto_isim)){
                                     ürünlerArrayList.add(ürün);
-                                    Log.d("Foto ismi Eşleşti",foto_isim+" : "+ürün.getIsim());
+                                    Log.d("Foto ismi Eşleşti",foto_isim+" : "+ürün.getModel_isim());
                                 }
                                 else{
                                     Log.d("Ürün Bilgi","Fotoğrafa ait ürün bulunamadı.");

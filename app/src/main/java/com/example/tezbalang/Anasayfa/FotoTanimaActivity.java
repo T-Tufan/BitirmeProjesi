@@ -85,12 +85,14 @@ public class FotoTanimaActivity extends AppCompatActivity{
                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(getApplicationContext(), "Model indirme başarılı", Toast.LENGTH_SHORT).show();
+                            Log.d("Model indirme durumu : ","Başarılı");
+                            //Toast.makeText(getApplicationContext(), "Model indirme başarılı", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getApplicationContext(), "Model indirme başarısız", Toast.LENGTH_LONG).show();
+                    Log.d("Model indirme durumu : ","Başarısız");
+                    //Toast.makeText(getApplicationContext(), "Model indirme başarısız", Toast.LENGTH_LONG).show();
                 }
             });
 
